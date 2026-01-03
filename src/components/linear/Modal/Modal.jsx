@@ -16,61 +16,24 @@ export const Modal = ({ isOpen, onClose, children, ariaLabel = 'Modal' }) => {
   useEffect(() => {
     if (!isOpen) return;
 
-    // 이전 포커스 요소 저장
-    previousFocusRef.current = document.activeElement;
-
-    // ESC 키 핸들러
+    // ESC 키 핸들러 (IME 조합 중에는 무시)
     const handleEscape = (e) => {
+      // IME 조합 중이면 무시 (한글 입력 등)
+      if (e.isComposing || e.keyCode === 229) return;
+
       if (e.key === 'Escape') {
         onClose();
       }
     };
 
-    // Focus trap 구현
-    const handleTab = (e) => {
-      if (e.key !== 'Tab') return;
-
-      const focusableElements = contentRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-
-      if (!focusableElements || focusableElements.length === 0) return;
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          lastElement.focus();
-          e.preventDefault();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement.focus();
-          e.preventDefault();
-        }
-      }
-    };
-
     document.addEventListener('keydown', handleEscape);
-    document.addEventListener('keydown', handleTab);
 
     // body 스크롤 방지
     document.body.style.overflow = 'hidden';
 
-    // 모달로 포커스 이동
-    const firstFocusable = contentRef.current?.querySelector(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    firstFocusable?.focus();
-
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.removeEventListener('keydown', handleTab);
       document.body.style.overflow = '';
-
-      // 이전 포커스 복원
-      previousFocusRef.current?.focus();
     };
   }, [isOpen, onClose]);
 
