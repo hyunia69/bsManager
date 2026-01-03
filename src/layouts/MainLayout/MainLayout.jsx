@@ -11,6 +11,7 @@ export const MainLayout = () => {
     { to: '/clients', label: '거래처관리' },
     { to: '/consultation/new', label: '상담기록' },
     { to: '/consultations', label: '상담목록' },
+    { to: '/todos', label: '할일' },
   ];
 
   return (

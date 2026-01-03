@@ -5,6 +5,7 @@ import { ClientsPage } from './pages/Clients';
 import { ConsultationNewPage } from './pages/ConsultationNew';
 import { ConsultationsPage } from './pages/Consultations';
 import { CompanyHistoryPage } from './pages/CompanyHistory';
+import { TodosPage } from './pages/Todos';
 
 /**
  * bsManager 앱 루트 컴포넌트
@@ -20,6 +21,7 @@ function App() {
           <Route path="/clients/:id/history" element={<CompanyHistoryPage />} />
           <Route path="/consultation/new" element={<ConsultationNewPage />} />
           <Route path="/consultations" element={<ConsultationsPage />} />
+          <Route path="/todos" element={<TodosPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

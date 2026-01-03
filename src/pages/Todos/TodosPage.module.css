@@ -1,0 +1,465 @@
+/* TodosPage 스타일 */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6, 1.5rem);
+  padding: var(--page-padding-block, 2rem) var(--page-padding-inline, 1.5rem);
+  max-width: var(--page-max-width, 1400px);
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-4, 1rem);
+}
+
+.title {
+  font-size: var(--title-3-size, 1.5rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* 검색 영역 */
+.searchCard {
+  margin-bottom: var(--spacing-2, 0.5rem);
+}
+
+.searchRow {
+  display: flex;
+  gap: var(--spacing-3, 0.75rem);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.searchField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1, 0.25rem);
+}
+
+.searchLabel {
+  font-size: var(--text-small-size, 0.875rem);
+  color: var(--color-text-secondary);
+}
+
+.viewModeButtons {
+  display: flex;
+  gap: var(--spacing-2, 0.5rem);
+  margin-top: var(--spacing-3, 0.75rem);
+}
+
+.viewModeButton {
+  padding: var(--spacing-2, 0.5rem) var(--spacing-4, 1rem);
+  border: 1px solid var(--color-border-primary);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-8, 0.5rem);
+  cursor: pointer;
+  font-size: var(--text-small-size, 0.875rem);
+  transition: all var(--speed-quick-transition, 150ms) var(--ease-out-quad);
+}
+
+.viewModeButton:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.viewModeButton.active {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border-color: var(--color-accent);
+}
+
+/* 메인 컨텐츠 영역 */
+.content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--spacing-6, 1.5rem);
+}
+
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 리스트 영역 */
+.listSection {
+  min-height: 400px;
+}
+
+.sectionTitle {
+  font-size: var(--title-6-size, 1rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* 할 일 리스트 */
+.todoList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+.todoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3, 0.75rem);
+  padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-8, 0.5rem);
+  cursor: pointer;
+  transition: all var(--speed-quick-transition, 150ms) var(--ease-out-quad);
+}
+
+.todoItem:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-accent);
+}
+
+.todoItem.selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+.todoItem.complete {
+  opacity: 0.7;
+}
+
+.todoItem.complete .todoTitle {
+  text-decoration: line-through;
+  color: var(--color-text-tertiary);
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-4, 0.25rem);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--speed-quick-transition, 150ms) var(--ease-out-quad);
+  margin-top: 2px;
+}
+
+.checkbox:hover {
+  border-color: var(--color-accent);
+}
+
+.checkbox.checked {
+  background: var(--color-success, #22c55e);
+  border-color: var(--color-success, #22c55e);
+}
+
+.checkbox.checked::after {
+  content: '✓';
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.checkbox.incomplete {
+  border-color: var(--color-danger, #ef4444);
+}
+
+.todoContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.todoTitle {
+  font-size: var(--text-base-size, 1rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-1, 0.25rem) 0;
+}
+
+.todoMeta {
+  display: flex;
+  gap: var(--spacing-3, 0.75rem);
+  font-size: var(--text-small-size, 0.875rem);
+  color: var(--color-text-tertiary);
+}
+
+.repeatBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 6px;
+  font-size: 10px;
+  background: var(--color-brand-bg, rgba(99, 102, 241, 0.2));
+  color: var(--color-accent);
+  border-radius: var(--radius-4, 0.25rem);
+}
+
+.todoDate {
+  color: var(--color-text-secondary);
+}
+
+.todoActions {
+  display: flex;
+  gap: var(--spacing-1, 0.25rem);
+}
+
+/* 날짜 그룹 (주간 뷰) */
+.dateGroup {
+  margin-bottom: var(--spacing-4, 1rem);
+}
+
+.dateGroupHeader {
+  font-size: var(--text-small-size, 0.875rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-2, 0.5rem) 0;
+  border-bottom: 1px solid var(--color-border-primary);
+  margin-bottom: var(--spacing-2, 0.5rem);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+.dateGroupDot {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+}
+
+/* 폼 영역 */
+.formSection {
+  position: sticky;
+  top: var(--spacing-4, 1rem);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4, 1rem);
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1, 0.25rem);
+}
+
+.label {
+  font-size: var(--text-small-size, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-secondary);
+}
+
+.required {
+  color: var(--color-danger, #ef4444);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3, 0.75rem);
+}
+
+.repeatOptions {
+  margin-top: var(--spacing-2, 0.5rem);
+}
+
+.formError {
+  color: var(--color-danger, #ef4444);
+  font-size: var(--text-small-size, 0.875rem);
+  margin: 0;
+}
+
+.formButtons {
+  display: flex;
+  gap: var(--spacing-2, 0.5rem);
+  justify-content: flex-end;
+  margin-top: var(--spacing-2, 0.5rem);
+}
+
+/* 메시지 */
+.message {
+  text-align: center;
+  color: var(--color-text-tertiary);
+  padding: var(--spacing-8, 2rem);
+}
+
+.errorMessage {
+  text-align: center;
+  color: var(--color-danger, #ef4444);
+  padding: var(--spacing-8, 2rem);
+}
+
+/* 캘린더 스타일 */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2, 0.5rem) 0;
+}
+
+.calendarTitle {
+  font-size: var(--title-6-size, 1rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary);
+}
+
+.calendarNav {
+  display: flex;
+  gap: var(--spacing-2, 0.5rem);
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--color-border-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-8, 0.5rem);
+  overflow: hidden;
+}
+
+.calendarDayHeader {
+  padding: var(--spacing-2, 0.5rem);
+  text-align: center;
+  font-size: var(--text-small-size, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+}
+
+.calendarDay {
+  min-height: 80px;
+  padding: var(--spacing-1, 0.25rem);
+  background: var(--color-bg-secondary);
+  cursor: pointer;
+  transition: background var(--speed-quick-transition, 150ms) var(--ease-out-quad);
+}
+
+.calendarDay:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.calendarDay.otherMonth {
+  background: var(--color-bg-primary);
+  opacity: 0.5;
+}
+
+.calendarDay.today {
+  background: rgba(135, 206, 250, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(135, 206, 250, 0.25);
+}
+
+.calendarDay.selected {
+  background: var(--color-accent);
+}
+
+.calendarDay.selected .dayNumber {
+  color: white;
+}
+
+.dayNumber {
+  font-size: var(--text-small-size, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-1, 0.25rem);
+}
+
+.dayTodos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dayTodoItem {
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.dayTodoItem.incomplete {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--color-danger, #ef4444);
+}
+
+.dayTodoItem.complete {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--color-success, #22c55e);
+}
+
+.moreTodos {
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+/* 삭제 확인 모달 */
+.deleteConfirm {
+  text-align: center;
+  padding: var(--spacing-4, 1rem);
+}
+
+.deleteConfirm p {
+  margin-bottom: var(--spacing-4, 1rem);
+  color: var(--color-text-secondary);
+}
+
+.deleteOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3, 0.75rem);
+  margin-top: var(--spacing-4, 1rem);
+}
+
+.deleteOption {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-1, 0.25rem);
+  padding: var(--spacing-4, 1rem);
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--radius-8, 0.5rem);
+  background: var(--color-bg-secondary);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--speed-quick-transition, 150ms) var(--ease-out-quad);
+}
+
+.deleteOption:hover {
+  border-color: var(--color-accent);
+  background: var(--color-bg-tertiary);
+}
+
+.deleteOption.selected {
+  border-color: var(--color-accent);
+  background: var(--color-brand-bg, rgba(99, 102, 241, 0.1));
+}
+
+.deleteOption strong {
+  font-size: var(--text-base-size, 1rem);
+  color: var(--color-text-primary);
+}
+
+.deleteOption span {
+  font-size: var(--text-small-size, 0.875rem);
+  color: var(--color-text-tertiary);
+}
