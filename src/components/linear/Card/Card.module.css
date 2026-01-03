@@ -1,0 +1,146 @@
+/* Card Container */
+.card {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+
+  /* Visual */
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-12);
+  box-shadow: var(--shadow-low);
+
+  /* Spacing */
+  padding: 24px;
+
+  /* Transition */
+  transition: all var(--speed-regularTransition) var(--ease-out-quad);
+
+  /* Overflow */
+  overflow: hidden;
+}
+
+/* Hover State */
+.card:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
+/* Card Header */
+.header {
+  /* Spacing */
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+
+  /* Visual */
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.header:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Typography in Header */
+.header h1,
+.header h2,
+.header h3,
+.header h4,
+.header h5,
+.header h6 {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.header h3 {
+  font-size: var(--title-3-size);
+  line-height: var(--title-3-line-height);
+  font-weight: var(--title-3-weight);
+}
+
+/* Card Content */
+.content {
+  /* Layout */
+  flex: 1;
+
+  /* Typography */
+  color: var(--color-text-secondary);
+  font-size: var(--text-regular-size);
+  line-height: var(--text-regular-line-height);
+
+  /* Spacing */
+  margin-bottom: 0;
+}
+
+.content:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+/* Content Typography */
+.content p {
+  margin: 0 0 12px;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Card Footer */
+.footer {
+  /* Spacing */
+  margin-top: 16px;
+  padding-top: 16px;
+
+  /* Visual */
+  border-top: 1px solid var(--color-border-primary);
+
+  /* Layout - typically for action buttons */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Compact Card Variant - when only header and content exist */
+.card:has(.header + .content:last-child) .header {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+/* Full-width Card Content */
+.content > *:first-child {
+  margin-top: 0;
+}
+
+.content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (width <= 768px) {
+  .card {
+    padding: 16px;
+  }
+
+  .header {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .content:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  .footer {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+}

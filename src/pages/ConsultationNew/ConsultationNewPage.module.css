@@ -1,0 +1,224 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: var(--title-3-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--title-3-letter-spacing);
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: var(--title-1-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.clientSearch {
+  max-width: 500px;
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchingIndicator {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-6);
+  box-shadow: var(--shadow-medium);
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.dropdownItem {
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background var(--speed-quick-transition);
+}
+
+.dropdownItem:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.companyName {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.contactPerson {
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+}
+
+.dropdownEmpty {
+  padding: 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.dropdownEmpty p {
+  margin: 0 0 8px 0;
+  font-size: var(--text-small-size);
+}
+
+.selectedClient {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clientInfo {
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: var(--radius-6);
+  font-size: var(--text-small-size);
+}
+
+.message.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* 기존 상담내역 섹션 */
+.historySection {
+  height: fit-content;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.historyItem {
+  padding: 12px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-6);
+  border-left: 3px solid var(--color-accent);
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.historyDate {
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+}
+
+.historyCategory {
+  font-size: var(--text-mini-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.historyContent {
+  font-size: var(--text-small-size);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.emptyMessage {
+  color: var(--color-text-tertiary);
+  text-align: center;
+  padding: 24px;
+  margin: 0;
+}
+
+/* 새 상담 입력 폼 */
+.formSection {
+  height: fit-content;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: var(--text-small-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.dateInput {
+  background: var(--color-bg-secondary);
+}
+
+.saveButton {
+  margin-top: 8px;
+}
+
+/* 모바일 반응형 */
+@media (width <= 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .clientSearch {
+    max-width: none;
+  }
+}

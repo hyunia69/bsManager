@@ -1,0 +1,117 @@
+.wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: var(--radius-8);
+  border: 1px solid var(--color-border-primary);
+  background: var(--color-bg-secondary);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-regular);
+  font-size: var(--text-small-size);
+  line-height: var(--text-small-line-height);
+}
+
+/* Header */
+.header {
+  background: var(--color-bg-tertiary);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.header .cell {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Body */
+.body .row {
+  border-bottom: 1px solid var(--color-border-primary);
+  transition: background var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.body .row:last-child {
+  border-bottom: none;
+}
+
+.body .row:hover {
+  background: var(--color-bg-tertiary);
+}
+
+/* Row States */
+.row.clickable {
+  cursor: pointer;
+}
+
+.row.clickable:focus {
+  outline: none;
+  background: var(--color-bg-tertiary);
+}
+
+.row.clickable:focus-visible {
+  outline: var(--focus-ring-outline);
+  outline-offset: -2px;
+}
+
+.row.selected {
+  background: var(--color-accent-tint);
+}
+
+.row.selected:hover {
+  background: var(--color-accent-tint);
+}
+
+/* Cell */
+.cell {
+  padding: 12px 16px;
+  color: var(--color-text-primary);
+  vertical-align: middle;
+  text-align: left;
+}
+
+/* Alignment */
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+/* First/Last cell padding adjustments */
+.cell:first-child {
+  padding-left: 20px;
+}
+
+.cell:last-child {
+  padding-right: 20px;
+}
+
+/* Empty State (to be used with a full-width cell) */
+.empty {
+  padding: 48px 16px;
+  text-align: center;
+  color: var(--color-text-tertiary);
+}
+
+/* Responsive */
+@media (width <= 768px) {
+  .cell {
+    padding: 10px 12px;
+  }
+
+  .cell:first-child {
+    padding-left: 16px;
+  }
+
+  .cell:last-child {
+    padding-right: 16px;
+  }
+}

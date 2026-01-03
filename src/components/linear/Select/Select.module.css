@@ -1,0 +1,107 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+.select {
+  /* Layout */
+  display: block;
+  width: 100%;
+
+  /* Typography */
+  font-family: var(--font-regular);
+  font-size: var(--text-regular-size);
+  line-height: var(--text-regular-line-height);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-primary);
+
+  /* Spacing */
+  padding: 8px 36px 8px 12px;
+  height: 40px;
+
+  /* Visual */
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-6);
+
+  /* Transition */
+  transition: all var(--speed-quick-transition) var(--ease-out-quad);
+
+  /* Remove default styles */
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Placeholder/Default option */
+.select:invalid,
+.select option[value=''][disabled] {
+  color: var(--color-text-quaternary);
+}
+
+/* Focus State */
+.select:focus {
+  border-color: var(--color-accent);
+  background: var(--color-bg-quaternary);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Hover State */
+.select:hover:not(:disabled) {
+  border-color: var(--color-border-secondary);
+  background: var(--color-bg-quaternary);
+}
+
+/* Disabled State */
+.select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-primary);
+}
+
+/* Error State */
+.select.error {
+  border-color: var(--color-red);
+  background: var(--color-bg-tertiary);
+}
+
+.select.error:focus {
+  border-color: var(--color-red);
+  outline-color: var(--color-red);
+}
+
+/* Arrow Icon */
+.arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.wrapper:hover .arrow {
+  color: var(--color-text-secondary);
+}
+
+.select:focus + .arrow {
+  color: var(--color-accent);
+}
+
+.select:disabled + .arrow {
+  opacity: 0.5;
+}
+
+/* Option Styles */
+.select option {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  padding: 8px 12px;
+}

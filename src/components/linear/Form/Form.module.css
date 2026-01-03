@@ -1,0 +1,97 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-small-size, 13px);
+  font-weight: var(--text-regular-weight-bold, 500);
+  color: var(--color-text-primary, #f7f8f8);
+}
+
+.required {
+  color: var(--color-red, #f87171);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  background: var(--color-bg-tertiary, #23262f);
+  border: 1px solid var(--color-border-primary, #23262f);
+  border-radius: var(--radius-6, 6px);
+  color: var(--color-text-primary, #f7f8f8);
+  font-size: var(--text-regular-size, 14px);
+  padding: 10px 12px;
+  transition: all var(--speed-quickTransition, 150ms) var(--ease-out-quad, ease-out);
+}
+
+.input:hover {
+  border-color: var(--color-border-secondary, #2e3035);
+}
+
+.input:focus {
+  outline: var(--focus-ring-outline, 2px solid #5e6ad2);
+  outline-offset: var(--focus-ring-offset, 2px);
+  border-color: var(--color-brand-bg, #5e6ad2);
+}
+
+.input.invalid {
+  border-color: var(--color-red, #f87171);
+}
+
+.input.invalid:focus {
+  outline-color: var(--color-red, #f87171);
+}
+
+.input::placeholder {
+  color: var(--color-text-tertiary, #6b7280);
+}
+
+.input:disabled {
+  background: var(--color-bg-secondary, #0f1014);
+  color: var(--color-text-tertiary, #6b7280);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.error {
+  font-size: var(--text-small-size, 13px);
+  color: var(--color-red, #f87171);
+  margin-top: 4px;
+}
+
+/* 텍스트 영역 스타일 */
+textarea.input {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* 셀렉트 스타일 */
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+/* 체크박스 & 라디오 스타일 */
+input[type='checkbox'].input,
+input[type='radio'].input {
+  width: auto;
+  margin-right: 8px;
+}

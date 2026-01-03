@@ -1,0 +1,11 @@
+/**
+ * bsManager 앱 전용 스타일
+ * Linear 디자인 토큰은 @styles/index.css에서 임포트됨
+ */
+
+/* 앱 전역 스타일 */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

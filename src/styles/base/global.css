@@ -1,0 +1,286 @@
+/**
+ * Global Styles
+ * Base HTML/Body styles, theme application, and global utilities
+ */
+
+/* Import Design Tokens */
+@import url('../tokens/linear.css');
+
+/* Import Base Styles */
+@import url('./reset.css');
+@import url('./typography.css');
+
+/* ===== HTML & BODY BASE STYLES ===== */
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-regular);
+  font-size: var(--text-regular-size);
+  line-height: var(--text-regular-line-height);
+  letter-spacing: var(--text-regular-letter-spacing);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===== SELECTION STYLES ===== */
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+
+/* For Webkit Browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+::-webkit-scrollbar:hover {
+  width: var(--scrollbar-size-active);
+  height: var(--scrollbar-size-active);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border-radius: var(--radius-rounded);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-tertiary);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-secondary) var(--color-bg-primary);
+}
+
+/* ===== FOCUS RING STYLES ===== */
+
+:focus-visible {
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-4);
+}
+
+/* Remove focus ring for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== DISABLED STATE ===== */
+
+:disabled,
+[disabled],
+[aria-disabled='true'] {
+  cursor: var(--cursor-disabled);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Container */
+.container {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-inline);
+}
+
+/* Prose (Content) Container */
+.prose {
+  max-width: var(--prose-max-width);
+  margin: 0 auto;
+}
+
+/* ===== ANIMATION UTILITIES ===== */
+
+.transition-quick {
+  transition: all var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.transition-regular {
+  transition: all var(--speed-regular-transition) var(--ease-out-quad);
+}
+
+/* Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== DARK MODE (Default) ===== */
+
+[data-theme='dark'],
+:root {
+  color-scheme: dark;
+}
+
+/* ===== LIGHT MODE (Optional - for future implementation) ===== */
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  /* Light mode variables would go here */
+}
+
+/* ===== OVERLAY STYLES ===== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--color-overlay-primary);
+  z-index: var(--layer-overlay);
+  backdrop-filter: blur(var(--header-blur));
+}
+
+/* ===== VISUALLY HIDDEN ===== */
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}
+
+/* ===== SKIP TO MAIN CONTENT ===== */
+
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: var(--layer-skip-nav);
+  border-radius: var(--radius-8);
+  transition: top var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.skip-to-content:focus {
+  top: 8px;
+  left: 8px;
+}
+
+/* ===== COMMON LAYOUT UTILITIES ===== */
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 4px;
+}
+
+.gap-8 {
+  gap: 8px;
+}
+
+.gap-12 {
+  gap: 12px;
+}
+
+.gap-16 {
+  gap: 16px;
+}
+
+.gap-24 {
+  gap: 24px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile-first approach - these are base styles for mobile */
+
+/* Tablet and up */
+@media (width >= 768px) {
+  :root {
+    --page-padding-inline: 32px;
+  }
+}
+
+/* Desktop and up */
+@media (width >= 1024px) {
+  :root {
+    --page-padding-inline: 48px;
+  }
+}
+
+/* Large Desktop */
+@media (width >= 1440px) {
+  :root {
+    --page-padding-inline: 64px;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  .no-print {
+    display: none;
+  }
+}

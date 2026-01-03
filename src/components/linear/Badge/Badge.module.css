@@ -1,0 +1,67 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-regular);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-4);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Size variants */
+.small {
+  font-size: var(--text-micro-size);
+  padding: 2px 6px;
+  min-height: 20px;
+}
+
+.medium {
+  font-size: var(--text-mini-size);
+  padding: 4px 10px;
+  min-height: 24px;
+}
+
+/* Status variants */
+.pending {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-border-primary);
+}
+
+.progress {
+  background: var(--color-yellow);
+  color: #1a1a1a;
+  border: 1px solid transparent;
+}
+
+.completed {
+  background: var(--color-green);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+/* Category variants (for consultation categories) */
+.inquiry {
+  background: var(--color-blue);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.claim {
+  background: var(--color-red);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.request {
+  background: var(--color-orange);
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.repair {
+  background: var(--color-indigo);
+  color: #ffffff;
+  border: 1px solid transparent;
+}

@@ -1,0 +1,1 @@
+export { ConsultationNewPage } from './ConsultationNewPage';

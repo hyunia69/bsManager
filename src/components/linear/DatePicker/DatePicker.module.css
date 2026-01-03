@@ -1,0 +1,68 @@
+.datePicker {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-6);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-size: var(--text-small-size);
+  font-family: inherit;
+  transition: all var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.datePicker:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.datePicker:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb, 99, 102, 241), 0.2);
+}
+
+.datePicker:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 날짜 아이콘 스타일 (브라우저별 차이 있음) */
+.datePicker::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity var(--speed-quick-transition);
+}
+
+.datePicker::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* 날짜 범위 선택 컨테이너 */
+.dateRange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.separator {
+  color: var(--color-text-tertiary);
+  font-size: var(--text-small-size);
+}
+
+/* 모바일 반응형 */
+@media (width <= 480px) {
+  .datePicker {
+    height: 32px;
+    padding: 0 8px;
+    font-size: var(--text-micro-size);
+  }
+
+  .dateRange {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .separator {
+    display: none;
+  }
+}

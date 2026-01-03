@@ -1,0 +1,113 @@
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--color-bg-secondary, #0f1014);
+  border-bottom: 1px solid var(--color-border-primary, #23262f);
+}
+
+.navItems {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-8, 8px);
+  color: var(--color-text-secondary, #9ca3af);
+  text-decoration: none;
+  font-size: var(--text-regular-size, 14px);
+  font-weight: var(--text-regular-weight, 400);
+  transition: all var(--speed-quickTransition, 150ms) var(--ease-out-quad, ease-out);
+  cursor: pointer;
+}
+
+.navItem:hover {
+  background: var(--color-bg-tertiary, #23262f);
+  color: var(--color-text-primary, #f7f8f8);
+}
+
+.navItem:focus {
+  outline: var(--focus-ring-outline, 2px solid #5e6ad2);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+.navItem.active {
+  background: var(--color-brand-bg, #5e6ad2);
+  color: var(--color-text-primary, #f7f8f8);
+  font-weight: var(--text-regular-weight-bold, 500);
+}
+
+.mobileMenuButton {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  margin-right: 16px;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--color-text-primary, #f7f8f8);
+  border-radius: 2px;
+  transition: all var(--speed-quickTransition, 150ms) var(--ease-out-quad, ease-out);
+}
+
+/* 모바일 반응형 */
+@media (width <= 768px) {
+  .mobileMenuButton {
+    display: block;
+  }
+
+  .navItems {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--color-bg-secondary, #0f1014);
+    border-bottom: 1px solid var(--color-border-primary, #23262f);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--speed-regularTransition, 200ms) var(--ease-out-quad, ease-out);
+  }
+
+  .navItems.open {
+    max-height: 400px;
+  }
+
+  .navItem {
+    border-radius: 0;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--color-border-primary, #23262f);
+  }
+
+  .navItem:last-child {
+    border-bottom: none;
+  }
+}

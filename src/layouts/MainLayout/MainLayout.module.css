@@ -1,0 +1,102 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--layer-header, 100);
+  background: var(--header-bg, rgba(11, 11, 11, 0.8));
+  backdrop-filter: blur(var(--header-blur, 20px));
+  border-bottom: 1px solid var(--header-border, rgba(255, 255, 255, 0.08));
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  max-width: var(--page-max-width, 1024px);
+  margin: 0 auto;
+  padding: 0 var(--page-padding-inline, 24px);
+  height: var(--header-height, 64px);
+  gap: 24px;
+}
+
+.logo {
+  font-size: var(--title-1-size, 1.0625rem);
+  font-weight: var(--font-weight-semibold, 590);
+  color: var(--color-text-primary, #f7f8f8);
+  text-decoration: none;
+  letter-spacing: var(--title-1-letter-spacing, -0.012em);
+  transition: color var(--speed-quick-transition, 0.1s) var(--ease-out-quad);
+}
+
+.logo:hover {
+  color: var(--color-accent, #7170ff);
+}
+
+.navItems {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: var(--radius-8, 8px);
+  color: var(--color-text-secondary, #d0d6e0);
+  text-decoration: none;
+  font-size: var(--text-small-size, 0.875rem);
+  font-weight: var(--font-weight-normal, 400);
+  transition: all var(--speed-quick-transition, 0.1s) var(--ease-out-quad);
+  cursor: pointer;
+}
+
+.navItem:hover {
+  background: var(--color-bg-tertiary, #232326);
+  color: var(--color-text-primary, #f7f8f8);
+}
+
+.navItem:focus {
+  outline: var(--focus-ring-outline, 2px solid #5e6ad2);
+  outline-offset: var(--focus-ring-offset, 2px);
+}
+
+.navItem.active {
+  background: var(--color-brand-bg, #5e6ad2);
+  color: var(--color-brand-text, #fff);
+  font-weight: var(--font-weight-medium, 510);
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.main {
+  flex: 1;
+  max-width: var(--page-max-width, 1024px);
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--page-padding-block, 64px) var(--page-padding-inline, 24px);
+}
+
+/* 모바일 반응형 */
+@media (width <= 768px) {
+  .nav {
+    gap: 16px;
+  }
+
+  .navItems {
+    display: none;
+  }
+
+  .main {
+    padding: 24px var(--page-padding-inline, 24px);
+  }
+}

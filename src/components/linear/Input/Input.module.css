@@ -1,0 +1,98 @@
+/* Base Input Styles */
+.input {
+  /* Layout */
+  display: block;
+  width: 100%;
+
+  /* Typography */
+  font-family: var(--font-regular);
+  font-size: var(--text-regular-size);
+  line-height: var(--text-regular-line-height);
+  font-weight: var(--text-regular-weight);
+  color: var(--color-text-primary);
+
+  /* Spacing */
+  padding: 8px 12px;
+  height: 40px;
+
+  /* Visual */
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-6);
+
+  /* Transition */
+  transition: all var(--speed-quickTransition) var(--ease-out-quad);
+
+  /* Remove default styles */
+  outline: none;
+  appearance: none;
+}
+
+/* Placeholder Styles */
+.input::placeholder {
+  color: var(--color-text-quaternary);
+  opacity: 1;
+}
+
+/* Focus State */
+.input:focus {
+  border-color: var(--color-accent);
+  background: var(--color-bg-quaternary);
+  outline: var(--focus-ring-outline);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Disabled State */
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-primary);
+}
+
+.input:disabled::placeholder {
+  color: var(--color-text-quaternary);
+}
+
+/* Autofill Styles - Override browser defaults */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text-primary);
+  box-shadow: 0 0 0 1000px var(--color-bg-tertiary) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Hover State */
+.input:hover:not(:disabled) {
+  border-color: var(--color-border-secondary);
+  background: var(--color-bg-quaternary);
+}
+
+/* Error State */
+.input.error {
+  border-color: var(--color-red);
+  background: var(--color-bg-tertiary);
+}
+
+.input.error:focus {
+  border-color: var(--color-red);
+  outline-color: var(--color-red);
+}
+
+/* Number Input - Hide Spinners */
+.input[type='number']::-webkit-inner-spin-button,
+.input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.input[type='number'] {
+  appearance: textfield;
+}
+
+/* Password Input - Hide reveal button in Edge/IE */
+.input[type='password']::-ms-reveal,
+.input[type='password']::-ms-clear {
+  display: none;
+}

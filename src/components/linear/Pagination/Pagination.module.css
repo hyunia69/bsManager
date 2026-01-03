@@ -1,0 +1,70 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 0;
+}
+
+.pageButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-4);
+  background: var(--color-bg-primary);
+  color: var(--color-text-secondary);
+  font-size: var(--text-small-size);
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.pageButton:hover:not(:disabled) {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+}
+
+.pageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageButton.active {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  border-color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-text-tertiary);
+  font-size: var(--text-small-size);
+}
+
+/* 모바일 반응형 */
+@media (width <= 480px) {
+  .pagination {
+    gap: 2px;
+  }
+
+  .pageButton {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 6px;
+    font-size: var(--text-micro-size);
+  }
+
+  .ellipsis {
+    width: 24px;
+  }
+}
