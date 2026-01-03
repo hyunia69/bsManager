@@ -192,7 +192,7 @@ export const ConsultationsPage = () => {
               onEndDateChange={(e) => setEndDate(e.target.value)}
               className={styles.dateFilter}
             />
-            <Button variant="secondary" onClick={handleSearch}>
+            <Button variant="secondary" onClick={handleSearch} className={styles.searchButton}>
               검색
             </Button>
           </div>

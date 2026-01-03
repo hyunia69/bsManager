@@ -168,7 +168,7 @@
     0px 1px 1px 0px rgba(0, 0, 0, 0.07), 0px 0px 1px 0px rgba(0, 0, 0, 0.08);
 
   /* Page Layout */
-  --page-max-width: 1024px;
+  --page-max-width: 1400px;
   --page-padding-inline: 24px;
   --page-padding-block: 64px;
   --prose-max-width: 624px;
