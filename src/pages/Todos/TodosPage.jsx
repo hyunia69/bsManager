@@ -222,7 +222,15 @@ export const TodosPage = () => {
   // 폼 입력 변경
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // repeat_day는 숫자로 변환 (빈 문자열은 null)
+    if (name === 'repeat_day') {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value === '' ? null : parseInt(value, 10)
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   // 폼 초기화
