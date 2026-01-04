@@ -214,3 +214,36 @@ VITE_SUPABASE_ANON_KEY=your_anon_key
 - [ ] 상담내역기록 기능
 - [ ] 상담내역리스트 기능
 - [ ] 회사통합내역 기능
+
+## Deployment
+
+### 배포 플랫폼
+| 항목 | 값 |
+|------|-----|
+| 플랫폼 | Vercel |
+| GitHub 레포 | https://github.com/hyunia69/bsManager.git |
+| 배포 URL | (Vercel 연결 후 생성) |
+| 배포 방식 | GitHub 연동 자동 배포 |
+
+### 빌드 설정
+```
+Framework: Vite
+Build Command: npm run build
+Output Directory: dist
+```
+
+### 환경변수 (Vercel 대시보드에서 설정)
+```
+VITE_SUPABASE_URL=<supabase_project_url>
+VITE_SUPABASE_ANON_KEY=<supabase_anon_key>
+```
+
+### 배포 흐름
+```
+git push origin main → Vercel 자동 감지 → 빌드 → 배포
+```
+
+### 유용한 기능
+- **자동 배포**: main 브랜치 push 시 자동 배포
+- **Preview 배포**: PR 생성 시 별도 Preview URL 생성
+- **롤백**: Vercel 대시보드에서 이전 버전으로 롤백 가능
