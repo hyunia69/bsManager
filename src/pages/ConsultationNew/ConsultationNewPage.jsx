@@ -8,6 +8,13 @@ import {
   getConsultationsByClientId,
   createConsultation,
 } from '@services/consultationsService';
+import {
+  createTodo,
+  updateTodoStatus,
+  deleteTodo,
+  TODO_STATUS,
+  REPEAT_TYPE,
+} from '@services/todosService';
 import styles from './ConsultationNewPage.module.css';
 
 /**
@@ -31,6 +38,13 @@ export const ConsultationNewPage = () => {
   const [content, setContent] = useState('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+
+  // 할일 상태
+  const [todos, setTodos] = useState([]);
+  const [newTodoTitle, setNewTodoTitle] = useState('');
+  const [newTodoContent, setNewTodoContent] = useState('');
+  const [newTodoDueDate, setNewTodoDueDate] = useState('');
+  const [addingTodo, setAddingTodo] = useState(false);
 
   const categoryOptions = [
     { value: 'inquiry', label: '문의' },
@@ -172,6 +186,71 @@ export const ConsultationNewPage = () => {
   const formatDateTime = (dateString) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleString('ko-KR');
+  };
+
+  // 로컬 날짜를 YYYY-MM-DD 문자열로 변환
+  const getLocalDateString = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // 할일 추가
+  const handleAddTodo = async () => {
+    if (!newTodoTitle.trim()) return;
+
+    setAddingTodo(true);
+    const dueDate = newTodoDueDate || getLocalDateString();
+
+    const todoData = {
+      title: newTodoTitle.trim(),
+      content: newTodoContent.trim(),
+      due_date: dueDate,
+      status: TODO_STATUS.INCOMPLETE,
+      repeat_type: REPEAT_TYPE.NONE,
+    };
+
+    const { data, error } = await createTodo(todoData);
+    setAddingTodo(false);
+
+    if (!error && data) {
+      setTodos([...todos, data]);
+      setNewTodoTitle('');
+      setNewTodoContent('');
+      setNewTodoDueDate('');
+    }
+  };
+
+  // 할일 완료/미완료 토글
+  const handleToggleTodo = async (todoId, currentStatus) => {
+    const newStatus = currentStatus === TODO_STATUS.COMPLETE
+      ? TODO_STATUS.INCOMPLETE
+      : TODO_STATUS.COMPLETE;
+
+    const { data, error } = await updateTodoStatus(todoId, newStatus);
+
+    if (!error) {
+      setTodos(todos.map(todo =>
+        todo.id === todoId ? { ...todo, status: newStatus } : todo
+      ));
+    }
+  };
+
+  // 할일 삭제
+  const handleDeleteTodo = async (todoId) => {
+    const { error } = await deleteTodo(todoId);
+
+    if (!error) {
+      setTodos(todos.filter(todo => todo.id !== todoId));
+    }
+  };
+
+  // 날짜 표시 포맷 (YYYY-MM-DD → MM/DD)
+  const formatDueDate = (dateString) => {
+    if (!dateString) return '';
+    const parts = dateString.split('-');
+    return `${parts[1]}/${parts[2]}`;
   };
 
   return (
@@ -323,6 +402,88 @@ export const ConsultationNewPage = () => {
               >
                 {saving ? '저장 중...' : '저장'}
               </Button>
+            </div>
+
+            {/* 할일 섹션 */}
+            <div className={styles.todoSection}>
+              <h3 className={styles.todoSectionTitle}>할일</h3>
+
+              {/* 할일 입력 */}
+              <div className={styles.todoInputGroup}>
+                <div className={styles.todoInputRow}>
+                  <Input
+                    placeholder="할일 제목"
+                    value={newTodoTitle}
+                    onChange={(e) => setNewTodoTitle(e.target.value)}
+                    className={styles.todoInput}
+                  />
+                  <input
+                    type="date"
+                    value={newTodoDueDate}
+                    onChange={(e) => setNewTodoDueDate(e.target.value)}
+                    className={styles.todoDateInput}
+                  />
+                </div>
+                <div className={styles.todoContentRow}>
+                  <Textarea
+                    placeholder="할일 내용 (선택)"
+                    value={newTodoContent}
+                    onChange={(e) => setNewTodoContent(e.target.value)}
+                    rows={2}
+                    className={styles.todoContentInput}
+                  />
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={handleAddTodo}
+                    disabled={addingTodo || !newTodoTitle.trim()}
+                    className={styles.todoAddBtn}
+                  >
+                    {addingTodo ? '...' : '추가'}
+                  </Button>
+                </div>
+              </div>
+
+              {/* 할일 목록 */}
+              {todos.length > 0 && (
+                <ul className={styles.todoList}>
+                  {todos.map((todo) => (
+                    <li key={todo.id} className={styles.todoItem}>
+                      <div className={styles.todoMainRow}>
+                        <label className={styles.todoCheckbox}>
+                          <input
+                            type="checkbox"
+                            checked={todo.status === TODO_STATUS.COMPLETE}
+                            onChange={() => handleToggleTodo(todo.id, todo.status)}
+                          />
+                          <span className={`${styles.todoTitle} ${todo.status === TODO_STATUS.COMPLETE ? styles.completed : ''}`}>
+                            {todo.title}
+                          </span>
+                        </label>
+                        <div className={styles.todoMeta}>
+                          {todo.due_date && (
+                            <span className={styles.todoDueDate}>
+                              {formatDueDate(todo.due_date)}
+                            </span>
+                          )}
+                          <button
+                            className={styles.todoDeleteBtn}
+                            onClick={() => handleDeleteTodo(todo.id)}
+                            title="삭제"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      </div>
+                      {todo.content && (
+                        <p className={`${styles.todoContent} ${todo.status === TODO_STATUS.COMPLETE ? styles.completed : ''}`}>
+                          {todo.content}
+                        </p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </CardContent>
         </Card>

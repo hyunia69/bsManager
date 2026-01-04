@@ -212,6 +212,165 @@
   margin-top: 8px;
 }
 
+/* 할일 섹션 */
+.todoSection {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-primary);
+}
+
+.todoSectionTitle {
+  font-size: var(--text-small-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.todoInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.todoInputRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.todoInput {
+  flex: 1;
+}
+
+.todoDateInput {
+  width: 130px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-6);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: var(--text-small-size);
+}
+
+.todoDateInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.todoContentRow {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.todoContentInput {
+  flex: 1;
+}
+
+.todoAddBtn {
+  align-self: flex-end;
+  min-width: 60px;
+}
+
+.todoList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.todoItem {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-6);
+  gap: 6px;
+}
+
+.todoMainRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.todoCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  cursor: pointer;
+}
+
+.todoCheckbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+.todoTitle {
+  font-size: var(--text-small-size);
+  color: var(--color-text-primary);
+  transition: all var(--speed-quick-transition);
+}
+
+.todoTitle.completed {
+  text-decoration: line-through;
+  color: var(--color-text-tertiary);
+}
+
+.todoContent {
+  font-size: var(--text-micro-size);
+  color: var(--color-text-secondary);
+  margin: 0;
+  padding-left: 26px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.todoContent.completed {
+  text-decoration: line-through;
+  color: var(--color-text-tertiary);
+}
+
+.todoMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.todoDueDate {
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+  background: var(--color-bg-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-4);
+}
+
+.todoDeleteBtn {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--color-text-tertiary);
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: var(--radius-4);
+  transition: all var(--speed-quick-transition);
+}
+
+.todoDeleteBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
 /* 모바일 반응형 */
 @media (width <= 768px) {
   .layout {
@@ -220,5 +379,28 @@
 
   .clientSearch {
     max-width: none;
+  }
+
+  .todoInputRow {
+    flex-wrap: wrap;
+  }
+
+  .todoInput {
+    min-width: 100%;
+    order: 1;
+  }
+
+  .todoDateInput {
+    flex: 1;
+    order: 2;
+  }
+
+  .todoContentRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .todoAddBtn {
+    align-self: flex-end;
   }
 }
