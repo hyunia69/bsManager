@@ -273,7 +273,7 @@ export const ConsultationsPage = () => {
                           size="small"
                           onClick={() => handleCompanyHistory(consultation.client_id)}
                         >
-                          회사통합
+                          전체
                         </Button>
                       </div>
                     </TableCell>
@@ -407,7 +407,7 @@ export const ConsultationsPage = () => {
               handleCompanyHistory(selectedConsultation?.client_id)
             }
           >
-            회사통합내역 보기
+            전체내역 보기
           </Button>
           <Button variant="secondary" onClick={handleCloseDetail}>
             닫기

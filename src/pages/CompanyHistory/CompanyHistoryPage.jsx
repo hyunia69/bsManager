@@ -97,7 +97,7 @@ export const CompanyHistoryPage = () => {
           <Link to="/consultations" className={styles.backLink}>
             ← 목록으로
           </Link>
-          <h1 className={styles.title}>회사통합내역</h1>
+          <h1 className={styles.title}>전체내역</h1>
         </div>
       </header>
 

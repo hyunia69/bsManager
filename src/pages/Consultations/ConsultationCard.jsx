@@ -87,7 +87,7 @@ export const ConsultationCard = ({
           size="small"
           onClick={() => onCompanyHistory(consultation.client_id)}
         >
-          회사통합
+          전체
         </Button>
       </div>
     </div>
