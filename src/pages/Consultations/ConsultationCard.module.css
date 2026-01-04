@@ -1,0 +1,151 @@
+/* Card Container */
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-12);
+  padding: 16px;
+  transition: all var(--speed-regular-transition) var(--ease-out-quad);
+}
+
+.card:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+}
+
+/* Header: 회사명 + 상태 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.companyName {
+  font-size: var(--title-1-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* 서브 정보: 담당자, 연락처 */
+.subInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-small-size);
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.separator {
+  color: var(--color-text-tertiary);
+}
+
+.contactPerson,
+.phone {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 분류 배지 */
+.categoryWrapper {
+  margin-bottom: 12px;
+}
+
+.categoryBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: var(--text-micro-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-accent);
+  background: var(--color-accent-tint, rgba(99, 102, 241, 0.1));
+  border-radius: var(--radius-6);
+}
+
+/* 상담 내역 */
+.content {
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.contentLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-size: var(--text-small-size);
+  font-family: inherit;
+  line-height: 1.5;
+  word-break: break-word;
+  transition: color var(--speed-quick-transition) var(--ease-out-quad);
+}
+
+.contentLink:hover {
+  color: var(--color-accent);
+}
+
+/* 등록일시 */
+.dateInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-micro-size);
+  color: var(--color-text-tertiary);
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-primary);
+  margin-bottom: 12px;
+}
+
+.dateLabel {
+  font-weight: var(--font-weight-medium);
+}
+
+.dateValue {
+  color: var(--color-text-secondary);
+}
+
+/* Footer: 상태 변경 + 관리 버튼 */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-primary);
+}
+
+.statusSelect {
+  width: 100px;
+  height: 32px;
+  font-size: var(--text-micro-size);
+}
+
+/* 모바일 반응형 */
+@media (width <= 480px) {
+  .card {
+    padding: 12px;
+  }
+
+  .subInfo {
+    flex-wrap: wrap;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .statusSelect {
+    width: 100%;
+  }
+}

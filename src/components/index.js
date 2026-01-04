@@ -15,3 +15,4 @@ export { Badge, StatusBadge, STATUS_LABELS } from './linear/Badge';
 export { Textarea } from './linear/Textarea';
 export { Pagination } from './linear/Pagination';
 export { DatePicker, DateRangePicker } from './linear/DatePicker';
+export { ViewToggle } from './linear/ViewToggle';

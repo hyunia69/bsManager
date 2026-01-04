@@ -12,6 +12,7 @@ import {
   ModalFooter,
   Pagination,
   DateRangePicker,
+  ViewToggle,
 } from '@components';
 import { Select } from '@linear/Select';
 import { StatusBadge, STATUS_LABELS } from '@linear/Badge';
@@ -26,6 +27,7 @@ import {
   getConsultations,
   updateConsultationStatus,
 } from '@services/consultationsService';
+import { ConsultationCard } from './ConsultationCard';
 import styles from './ConsultationsPage.module.css';
 
 /**
@@ -52,6 +54,9 @@ export const ConsultationsPage = () => {
   // 상세보기 Modal 상태
   const [selectedConsultation, setSelectedConsultation] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 뷰 타입 상태 (list | card)
+  const [viewType, setViewType] = useState('list');
 
   const statusOptions = [
     { value: '', label: '전체' },
@@ -166,6 +171,7 @@ export const ConsultationsPage = () => {
     <div className={styles.page}>
       <header className={styles.header}>
         <h1 className={styles.title}>상담 목록</h1>
+        <ViewToggle value={viewType} onChange={setViewType} />
       </header>
 
       <Card className={styles.searchCard}>
@@ -210,7 +216,7 @@ export const ConsultationsPage = () => {
             <p className={styles.errorMessage}>오류: {error}</p>
           ) : consultations.length === 0 ? (
             <p className={styles.message}>등록된 상담내역이 없습니다.</p>
-          ) : (
+          ) : viewType === 'list' ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -275,6 +281,21 @@ export const ConsultationsPage = () => {
                 ))}
               </TableBody>
             </Table>
+          ) : (
+            <div className={styles.cardGrid}>
+              {consultations.map((consultation) => (
+                <ConsultationCard
+                  key={consultation.id}
+                  consultation={consultation}
+                  statusOptions={statusOptions.filter((opt) => opt.value !== '')}
+                  categoryLabels={categoryLabels}
+                  onStatusChange={handleStatusChange}
+                  onOpenDetail={handleOpenDetail}
+                  onCompanyHistory={handleCompanyHistory}
+                  formatDateTime={formatDateTime}
+                />
+              ))}
+            </div>
           )}
 
           {/* 페이지네이션 */}

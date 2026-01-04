@@ -58,6 +58,14 @@
   padding: 0;
 }
 
+/* 카드 그리드 레이아웃 */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
 .message {
   text-align: center;
   padding: 40px 20px;
@@ -184,6 +192,13 @@
   margin: 0;
 }
 
+/* 태블릿 반응형 */
+@media (width <= 1024px) {
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* 모바일 반응형 */
 @media (width <= 768px) {
   .searchRow {
@@ -209,5 +224,11 @@
 
   .detailGrid {
     grid-template-columns: 1fr;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    padding: 12px;
+    gap: 12px;
   }
 }
