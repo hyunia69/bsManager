@@ -34,14 +34,26 @@ export const ConsultationNewPage = () => {
 
   const categoryOptions = [
     { value: 'inquiry', label: '문의' },
-    { value: 'claim', label: '클레임' },
-    { value: 'request', label: '요청' },
-    { value: 'repair', label: '수리' },
+    { value: 'proposal', label: '제안' },
+    { value: 'order', label: '발주' },
+    { value: 'delivery', label: '납품' },
+    { value: 'as', label: 'AS' },
+    { value: 'outsource_in', label: '외주입고' },
+    { value: 'outsource_out', label: '외주발주' },
+    { value: 'outsource_req', label: '외주요청' },
   ];
+
+  // 기존 분류 호환성용 레이블 매핑
+  const legacyCategoryLabels = {
+    claim: '클레임',
+    request: '요청',
+    repair: '수리',
+  };
 
   const getCategoryLabel = (value) => {
     const option = categoryOptions.find((opt) => opt.value === value);
-    return option ? option.label : value;
+    if (option) return option.label;
+    return legacyCategoryLabels[value] || value;
   };
 
   // 업체 검색

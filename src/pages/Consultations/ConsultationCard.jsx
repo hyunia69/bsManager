@@ -11,6 +11,8 @@ import styles from './ConsultationCard.module.css';
  * @param {function} onStatusChange - 상태 변경 핸들러
  * @param {function} onOpenDetail - 상세보기 핸들러
  * @param {function} onCompanyHistory - 회사통합 이동 핸들러
+ * @param {function} onEdit - 수정 핸들러
+ * @param {function} onDelete - 삭제 핸들러
  * @param {function} formatDateTime - 날짜 포맷 함수
  */
 export const ConsultationCard = ({
@@ -20,6 +22,8 @@ export const ConsultationCard = ({
   onStatusChange,
   onOpenDetail,
   onCompanyHistory,
+  onEdit,
+  onDelete,
   formatDateTime,
 }) => {
   const truncateContent = (text, maxLength = 80) => {
@@ -82,13 +86,30 @@ export const ConsultationCard = ({
           onChange={(e) => onStatusChange(consultation.id, e.target.value)}
           className={styles.statusSelect}
         />
-        <Button
-          variant="ghost"
-          size="small"
-          onClick={() => onCompanyHistory(consultation.client_id)}
-        >
-          전체
-        </Button>
+        <div className={styles.footerButtons}>
+          <Button
+            variant="ghost"
+            size="small"
+            onClick={() => onCompanyHistory(consultation.client_id)}
+          >
+            전체
+          </Button>
+          <Button
+            variant="ghost"
+            size="small"
+            onClick={() => onEdit(consultation)}
+          >
+            수정
+          </Button>
+          <Button
+            variant="ghost"
+            size="small"
+            onClick={() => onDelete(consultation.id)}
+            className={styles.deleteButton}
+          >
+            삭제
+          </Button>
+        </div>
       </div>
     </div>
   );

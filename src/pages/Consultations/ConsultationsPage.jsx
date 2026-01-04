@@ -26,7 +26,10 @@ import {
 import {
   getConsultations,
   updateConsultationStatus,
+  updateConsultation,
+  deleteConsultation,
 } from '@services/consultationsService';
+import { Textarea } from '@linear/Textarea';
 import { ConsultationCard } from './ConsultationCard';
 import styles from './ConsultationsPage.module.css';
 
@@ -43,6 +46,7 @@ export const ConsultationsPage = () => {
   // 검색/필터 상태
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -55,6 +59,13 @@ export const ConsultationsPage = () => {
   const [selectedConsultation, setSelectedConsultation] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 수정 Modal 상태
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingConsultation, setEditingConsultation] = useState(null);
+  const [editCategory, setEditCategory] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [saving, setSaving] = useState(false);
+
   // 뷰 타입 상태 (list | card)
   const [viewType, setViewType] = useState('list');
 
@@ -66,11 +77,49 @@ export const ConsultationsPage = () => {
   ];
 
   const categoryLabels = {
+    // 새 분류
     inquiry: '문의',
+    proposal: '제안',
+    order: '발주',
+    delivery: '납품',
+    as: 'AS',
+    outsource_in: '외주입고',
+    outsource_out: '외주발주',
+    outsource_req: '외주요청',
+    // 기존 분류 (호환성)
     claim: '클레임',
     request: '요청',
     repair: '수리',
   };
+
+  const categoryFilterOptions = [
+    { value: '', label: '전체 분류' },
+    // 새 분류
+    { value: 'inquiry', label: '문의' },
+    { value: 'proposal', label: '제안' },
+    { value: 'order', label: '발주' },
+    { value: 'delivery', label: '납품' },
+    { value: 'as', label: 'AS' },
+    { value: 'outsource_in', label: '외주입고' },
+    { value: 'outsource_out', label: '외주발주' },
+    { value: 'outsource_req', label: '외주요청' },
+    // 기존 분류 (호환성)
+    { value: 'claim', label: '클레임' },
+    { value: 'request', label: '요청' },
+    { value: 'repair', label: '수리' },
+  ];
+
+  // 수정용 분류 옵션 (새 분류만)
+  const categoryEditOptions = [
+    { value: 'inquiry', label: '문의' },
+    { value: 'proposal', label: '제안' },
+    { value: 'order', label: '발주' },
+    { value: 'delivery', label: '납품' },
+    { value: 'as', label: 'AS' },
+    { value: 'outsource_in', label: '외주입고' },
+    { value: 'outsource_out', label: '외주발주' },
+    { value: 'outsource_req', label: '외주요청' },
+  ];
 
   // 상담 목록 조회
   const fetchConsultations = async (page = currentPage) => {
@@ -89,8 +138,15 @@ export const ConsultationsPage = () => {
     if (fetchError) {
       setError(fetchError.message);
     } else {
-      setConsultations(data || []);
-      setTotalCount(count || 0);
+      // 분류 필터 클라이언트 사이드 적용
+      let filtered = data || [];
+      let filteredCount = count || 0;
+      if (categoryFilter) {
+        filtered = filtered.filter((c) => c.category === categoryFilter);
+        filteredCount = filtered.length;
+      }
+      setConsultations(filtered);
+      setTotalCount(filteredCount);
     }
     setLoading(false);
   };
@@ -134,6 +190,63 @@ export const ConsultationsPage = () => {
   // 회사통합내역 페이지로 이동
   const handleCompanyHistory = (clientId) => {
     navigate(`/clients/${clientId}/history`);
+  };
+
+  // 상담 삭제
+  const handleDelete = async (id) => {
+    if (!window.confirm('정말 이 상담을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    const { error: deleteError } = await deleteConsultation(id);
+    if (deleteError) {
+      alert('삭제 중 오류가 발생했습니다: ' + deleteError.message);
+    } else {
+      // 목록 새로고침
+      fetchConsultations();
+    }
+  };
+
+  // 수정 Modal 열기
+  const handleEdit = (consultation) => {
+    setEditingConsultation(consultation);
+    setEditCategory(consultation.category);
+    setEditContent(consultation.content);
+    setIsEditModalOpen(true);
+  };
+
+  // 수정 Modal 닫기
+  const handleCloseEdit = () => {
+    setEditingConsultation(null);
+    setEditCategory('');
+    setEditContent('');
+    setIsEditModalOpen(false);
+  };
+
+  // 수정 저장
+  const handleEditSave = async () => {
+    if (!editCategory) {
+      alert('분류를 선택해주세요.');
+      return;
+    }
+    if (!editContent.trim()) {
+      alert('상담내역을 입력해주세요.');
+      return;
+    }
+
+    setSaving(true);
+    const { error: updateError } = await updateConsultation(editingConsultation.id, {
+      category: editCategory,
+      content: editContent.trim(),
+    });
+    setSaving(false);
+
+    if (updateError) {
+      alert('수정 중 오류가 발생했습니다: ' + updateError.message);
+    } else {
+      handleCloseEdit();
+      fetchConsultations();
+    }
   };
 
   // 내용 요약
@@ -190,6 +303,13 @@ export const ConsultationsPage = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               placeholder="진행상태"
               className={styles.statusFilter}
+            />
+            <Select
+              options={categoryFilterOptions}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              placeholder="분류"
+              className={styles.categoryFilter}
             />
             <DateRangePicker
               startDate={startDate}
@@ -275,6 +395,21 @@ export const ConsultationsPage = () => {
                         >
                           전체
                         </Button>
+                        <Button
+                          variant="ghost"
+                          size="small"
+                          onClick={() => handleEdit(consultation)}
+                        >
+                          수정
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="small"
+                          onClick={() => handleDelete(consultation.id)}
+                          className={styles.deleteButton}
+                        >
+                          삭제
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -292,6 +427,8 @@ export const ConsultationsPage = () => {
                   onStatusChange={handleStatusChange}
                   onOpenDetail={handleOpenDetail}
                   onCompanyHistory={handleCompanyHistory}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
                   formatDateTime={formatDateTime}
                 />
               ))}
@@ -411,6 +548,64 @@ export const ConsultationsPage = () => {
           </Button>
           <Button variant="secondary" onClick={handleCloseDetail}>
             닫기
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      {/* 상담 수정 Modal */}
+      <Modal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEdit}
+        ariaLabel="상담 수정"
+      >
+        <ModalHeader onClose={handleCloseEdit}>
+          <h2 className={styles.modalTitle}>상담 수정</h2>
+        </ModalHeader>
+        <ModalContent>
+          {editingConsultation && (
+            <div className={styles.editContent}>
+              {/* 업체 정보 (읽기 전용) */}
+              <div className={styles.editClientInfo}>
+                <span className={styles.editClientLabel}>업체:</span>
+                <span className={styles.editClientValue}>
+                  {editingConsultation.clients?.company_name || '-'}
+                </span>
+              </div>
+
+              {/* 분류 선택 */}
+              <div className={styles.editField}>
+                <label className={styles.editLabel}>분류</label>
+                <Select
+                  options={categoryEditOptions}
+                  value={editCategory}
+                  onChange={(e) => setEditCategory(e.target.value)}
+                  placeholder="분류 선택"
+                />
+              </div>
+
+              {/* 상담내역 입력 */}
+              <div className={styles.editField}>
+                <label className={styles.editLabel}>상담내역</label>
+                <Textarea
+                  value={editContent}
+                  onChange={(e) => setEditContent(e.target.value)}
+                  placeholder="상담 내용을 입력하세요"
+                  rows={6}
+                />
+              </div>
+            </div>
+          )}
+        </ModalContent>
+        <ModalFooter>
+          <Button variant="ghost" onClick={handleCloseEdit}>
+            취소
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleEditSave}
+            disabled={saving}
+          >
+            {saving ? '저장 중...' : '저장'}
           </Button>
         </ModalFooter>
       </Modal>

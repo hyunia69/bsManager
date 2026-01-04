@@ -130,6 +130,19 @@
   font-size: var(--text-micro-size);
 }
 
+.footerButtons {
+  display: flex;
+  gap: 4px;
+}
+
+.deleteButton {
+  color: var(--color-error, #ef4444);
+}
+
+.deleteButton:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
 /* 모바일 반응형 */
 @media (width <= 480px) {
   .card {
@@ -147,5 +160,10 @@
 
   .statusSelect {
     width: 100%;
+  }
+
+  .footerButtons {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

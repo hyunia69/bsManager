@@ -7,7 +7,7 @@ import { supabase } from './supabase';
 
 /**
  * 상담 분류 타입
- * @typedef {'inquiry'|'claim'|'request'|'repair'} Category
+ * @typedef {'inquiry'|'proposal'|'order'|'delivery'|'as'|'outsource_in'|'outsource_out'|'outsource_req'|'claim'|'request'|'repair'} Category
  */
 
 /**
