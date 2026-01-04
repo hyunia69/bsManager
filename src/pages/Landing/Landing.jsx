@@ -29,6 +29,7 @@ export const Landing = () => {
             <Link to="/clients" className={styles.navLink}>거래처관리</Link>
             <Link to="/consultation/new" className={styles.navLink}>상담기록</Link>
             <Link to="/consultations" className={styles.navLink}>상담목록</Link>
+            <Link to="/todos" className={styles.navLink}>할일</Link>
           </div>
         </nav>
         <ThemeToggle />
@@ -143,6 +144,7 @@ export const Landing = () => {
               <Link to="/clients" className={styles.footerLink}>거래처관리</Link>
               <Link to="/consultation/new" className={styles.footerLink}>상담기록</Link>
               <Link to="/consultations" className={styles.footerLink}>상담목록</Link>
+              <Link to="/todos" className={styles.footerLink}>할일</Link>
             </div>
             <div className={styles.footerLinkGroup}>
               <h4 className={styles.footerLinkTitle}>지원</h4>
