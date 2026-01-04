@@ -178,7 +178,27 @@ export const TodosPage = () => {
             result.data || [],
             deletedResult.data || []
           );
-          const allTodos = [...(result.data || []), ...expandedTodos];
+
+          // 반복 일정의 원본 날짜에 개별 완료 일정이 있으면 원본 제외
+          // 개별 완료/처리된 일정 키 (반복 없는 일정만)
+          const individualTodoKeys = new Set(
+            (result.data || [])
+              .filter((t) => !t.repeat_type || t.repeat_type === REPEAT_TYPE.NONE)
+              .map((t) => `${t.due_date}_${t.title}`)
+          );
+
+          // 원본 반복 일정 중 개별 처리된 것은 제외
+          const filteredBaseTodos = (result.data || []).filter((todo) => {
+            // 반복 일정이 아니면 유지
+            if (!todo.repeat_type || todo.repeat_type === REPEAT_TYPE.NONE) {
+              return true;
+            }
+            // 반복 일정인 경우, 같은 날짜+제목의 개별 일정이 있으면 제외
+            const key = `${todo.due_date}_${todo.title}`;
+            return !individualTodoKeys.has(key);
+          });
+
+          const allTodos = [...filteredBaseTodos, ...expandedTodos];
           // 날짜순 정렬
           allTodos.sort((a, b) => a.due_date.localeCompare(b.due_date));
           setTodos(allTodos);
@@ -316,23 +336,29 @@ export const TodosPage = () => {
         ? TODO_STATUS.INCOMPLETE
         : TODO_STATUS.COMPLETE;
 
-    // 반복 일정(가상)인 경우: 해당 날짜에 새 일정 생성
-    if (todo.isRecurring) {
-      // 해당 날짜에 이미 생성된 일정이 있는지 확인
-      const existingTodo = todos.find(
-        (t) => !t.isRecurring && t.due_date === todo.due_date && t.title === todo.title
+    // 반복 일정인지 확인 (가상 확장된 것 또는 원본 반복 일정)
+    const isRepeatingTodo = todo.isRecurring || (todo.repeat_type && todo.repeat_type !== REPEAT_TYPE.NONE);
+
+    if (isRepeatingTodo) {
+      // 반복 일정: 해당 날짜에 개별 일정으로 상태 관리
+      // 해당 날짜에 이미 생성된 개별 일정이 있는지 확인 (반복 없는 일정)
+      const existingIndividualTodo = todos.find(
+        (t) => !t.isRecurring &&
+               t.due_date === todo.due_date &&
+               t.title === todo.title &&
+               (!t.repeat_type || t.repeat_type === REPEAT_TYPE.NONE)
       );
 
-      if (existingTodo) {
-        // 이미 해당 날짜에 일정이 있으면 그 일정의 상태만 변경
-        const { error: statusError } = await updateTodoStatus(existingTodo.id, newStatus);
+      if (existingIndividualTodo) {
+        // 이미 해당 날짜에 개별 일정이 있으면 그 일정의 상태만 변경
+        const { error: statusError } = await updateTodoStatus(existingIndividualTodo.id, newStatus);
         if (statusError) {
           alert('상태 변경 중 오류가 발생했습니다: ' + statusError.message);
         } else {
           fetchTodos();
         }
       } else {
-        // 없으면 해당 날짜에 새 일정 생성 (반복 없음으로)
+        // 없으면 해당 날짜에 새 개별 일정 생성 (반복 없음으로)
         const { error: createError } = await createTodo({
           title: todo.title,
           content: todo.content,
@@ -348,7 +374,7 @@ export const TodosPage = () => {
         }
       }
     } else {
-      // 일반 일정: 기존 방식대로 상태 변경
+      // 일반 일정 (반복 없음): 기존 방식대로 상태 변경
       const { error: statusError } = await updateTodoStatus(todo.id, newStatus);
       if (statusError) {
         alert('상태 변경 중 오류가 발생했습니다: ' + statusError.message);
