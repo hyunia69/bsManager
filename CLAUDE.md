@@ -11,7 +11,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | 파일 | 설명 |
 |------|------|
 | `claudedocs/bsManager요구사항.md` | 기능 요구사항 정의 |
-| `claudedocs/bsManager_Function_PLAN.md` | 페이지별 기능 설계 및 구현 체크리스트 |  
+| `claudedocs/bsManager_Function_PLAN.md` | 페이지별 기능 설계 및 구현 체크리스트 |
+| `claudedocs/bsManager_Auth_DESIGN.md` | 로그인/인증 기능 설계서 |  
 
 ## Project Overview
 

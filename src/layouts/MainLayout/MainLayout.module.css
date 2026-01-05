@@ -75,7 +75,16 @@
 .navActions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+}
+
+.userEmail {
+  font-size: var(--text-small-size, 0.875rem);
+  color: var(--color-text-secondary, #d0d6e0);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .main {
