@@ -89,6 +89,7 @@ export const TodosPage = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteMode, setDeleteMode] = useState(null); // 'single' | 'all' | null
+  const [parentRecurringTodo, setParentRecurringTodo] = useState(null); // 완료된 일정의 원본 반복 일정
 
   // 날짜 범위 계산 헬퍼
   const getDateRange = useCallback(() => {
@@ -418,10 +419,25 @@ export const TodosPage = () => {
   };
 
   // 삭제 확인
-  const handleDeleteClick = (todo, e) => {
+  const handleDeleteClick = async (todo, e) => {
     e.stopPropagation();
     setDeleteTarget(todo);
     setDeleteMode(null);
+
+    // 완료된 일정(repeat_type: none)이 원본 반복 일정의 인스턴스인지 확인
+    // 같은 title을 가진 반복 일정이 있으면 원본으로 저장
+    const isAlreadyRepeating = todo.isRecurring || (todo.repeat_type && todo.repeat_type !== REPEAT_TYPE.NONE);
+    if (!isAlreadyRepeating) {
+      // DB에서 반복 일정 목록 조회하여 같은 title을 가진 원본 반복 일정 찾기
+      const { data: recurringTodos } = await getRecurringTodos();
+      const parentTodo = recurringTodos?.find(
+        (t) => t.title === todo.title && t.id !== todo.id
+      );
+      setParentRecurringTodo(parentTodo || null);
+    } else {
+      setParentRecurringTodo(null);
+    }
+
     setIsDeleteModalOpen(true);
   };
 
@@ -429,26 +445,77 @@ export const TodosPage = () => {
   const handleDeleteConfirm = async (mode) => {
     if (!deleteTarget) return;
 
-    // 반복 일정(원본 또는 가상)이고 개별 삭제인 경우
+    // 반복 일정(원본 또는 가상) 또는 완료된 반복 인스턴스
     const isRepeating = deleteTarget.isRecurring || (deleteTarget.repeat_type && deleteTarget.repeat_type !== REPEAT_TYPE.NONE);
-    if (isRepeating && mode === 'single') {
-      // 해당 날짜에 삭제 표시용 일정 생성 (is_deleted: true)
-      const { error: createError } = await createTodo({
-        title: deleteTarget.title,
-        content: deleteTarget.content,
-        due_date: deleteTarget.due_date,
-        status: TODO_STATUS.INCOMPLETE,
-        repeat_type: REPEAT_TYPE.NONE,
-        repeat_day: null,
-        is_deleted: true,
-      });
-      if (createError) {
-        alert('삭제 처리 중 오류가 발생했습니다: ' + createError.message);
+    const isCompletedInstance = parentRecurringTodo !== null;
+
+    if ((isRepeating || isCompletedInstance) && mode === 'single') {
+      // 개별 삭제
+      if (isCompletedInstance) {
+        // 완료된 인스턴스 삭제: 현재 일정 삭제 + 삭제 마킹 생성
+        const { error: deleteError } = await deleteTodo(deleteTarget.id);
+        if (deleteError) {
+          alert('삭제 중 오류가 발생했습니다: ' + deleteError.message);
+        } else {
+          // 해당 날짜에 삭제 표시용 일정 생성 (원본 반복 일정 확장 시 제외용)
+          await createTodo({
+            title: deleteTarget.title,
+            content: deleteTarget.content,
+            due_date: deleteTarget.due_date,
+            status: TODO_STATUS.INCOMPLETE,
+            repeat_type: REPEAT_TYPE.NONE,
+            repeat_day: null,
+            is_deleted: true,
+          });
+          fetchTodos();
+        }
       } else {
-        fetchTodos();
+        // 원본 반복 일정 또는 가상 확장 일정 개별 삭제
+        const { error: createError } = await createTodo({
+          title: deleteTarget.title,
+          content: deleteTarget.content,
+          due_date: deleteTarget.due_date,
+          status: TODO_STATUS.INCOMPLETE,
+          repeat_type: REPEAT_TYPE.NONE,
+          repeat_day: null,
+          is_deleted: true,
+        });
+        if (createError) {
+          alert('삭제 처리 중 오류가 발생했습니다: ' + createError.message);
+        } else {
+          fetchTodos();
+        }
+      }
+    } else if ((isRepeating || isCompletedInstance) && mode === 'all') {
+      // 전체 삭제
+      if (isCompletedInstance) {
+        // 완료된 인스턴스에서 전체 삭제: 원본 반복 일정 삭제 + 현재 일정 삭제
+        const { error: deleteParentError } = await deleteTodo(parentRecurringTodo.id);
+        if (deleteParentError) {
+          alert('삭제 중 오류가 발생했습니다: ' + deleteParentError.message);
+        } else {
+          // 현재 완료된 일정도 삭제
+          await deleteTodo(deleteTarget.id);
+          if (editingTodo?.id === deleteTarget.id || editingTodo?.id === parentRecurringTodo.id) {
+            resetForm();
+          }
+          fetchTodos();
+        }
+      } else {
+        // 원본 반복 일정 전체 삭제
+        const todoId = deleteTarget.originalId || deleteTarget.id;
+        const { error: deleteError } = await deleteTodo(todoId);
+        if (deleteError) {
+          alert('삭제 중 오류가 발생했습니다: ' + deleteError.message);
+        } else {
+          if (editingTodo?.id === deleteTarget.id || editingTodo?.id === todoId) {
+            resetForm();
+          }
+          fetchTodos();
+        }
       }
     } else {
-      // 전체 삭제 또는 일반 일정 삭제
+      // 일반 일정 삭제
       const todoId = deleteTarget.originalId || deleteTarget.id;
       const { error: deleteError } = await deleteTodo(todoId);
       if (deleteError) {
@@ -463,6 +530,7 @@ export const TodosPage = () => {
     setIsDeleteModalOpen(false);
     setDeleteTarget(null);
     setDeleteMode(null);
+    setParentRecurringTodo(null);
   };
 
   // 날짜 포맷 (타임존 문제 방지를 위해 문자열 직접 파싱)
@@ -967,14 +1035,14 @@ export const TodosPage = () => {
       </div>
 
       {/* 삭제 확인 모달 */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
+      <Modal isOpen={isDeleteModalOpen} onClose={() => { setIsDeleteModalOpen(false); setParentRecurringTodo(null); }}>
         <ModalHeader>
           <h2>할 일 삭제</h2>
         </ModalHeader>
         <ModalContent>
           <div className={styles.deleteConfirm}>
-            {deleteTarget?.isRecurring || (deleteTarget?.repeat_type && deleteTarget?.repeat_type !== REPEAT_TYPE.NONE) ? (
-              // 반복 일정인 경우
+            {deleteTarget?.isRecurring || (deleteTarget?.repeat_type && deleteTarget?.repeat_type !== REPEAT_TYPE.NONE) || parentRecurringTodo ? (
+              // 반복 일정인 경우 (원본 또는 완료된 인스턴스)
               <>
                 <p>"{deleteTarget?.title}" 반복 일정을 삭제하시겠습니까?</p>
                 <div className={styles.deleteOptions}>
@@ -1008,7 +1076,7 @@ export const TodosPage = () => {
           <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)}>
             취소
           </Button>
-          {deleteTarget?.isRecurring || (deleteTarget?.repeat_type && deleteTarget?.repeat_type !== REPEAT_TYPE.NONE) ? (
+          {deleteTarget?.isRecurring || (deleteTarget?.repeat_type && deleteTarget?.repeat_type !== REPEAT_TYPE.NONE) || parentRecurringTodo ? (
             <Button
               variant="primary"
               onClick={() => handleDeleteConfirm(deleteMode)}
