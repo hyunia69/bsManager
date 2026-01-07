@@ -421,8 +421,9 @@ export const TodosPage = () => {
   const handleDeleteConfirm = async (mode) => {
     if (!deleteTarget) return;
 
-    // 반복 일정(가상)이고 개별 삭제인 경우
-    if (deleteTarget.isRecurring && mode === 'single') {
+    // 반복 일정(원본 또는 가상)이고 개별 삭제인 경우
+    const isRepeating = deleteTarget.isRecurring || (deleteTarget.repeat_type && deleteTarget.repeat_type !== REPEAT_TYPE.NONE);
+    if (isRepeating && mode === 'single') {
       // 해당 날짜에 삭제 표시용 일정 생성 (is_deleted: true)
       const { error: createError } = await createTodo({
         title: deleteTarget.title,
