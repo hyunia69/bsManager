@@ -48,7 +48,9 @@ export const ClientsPage = () => {
     company_name: '',
     contact_person: '',
     phone: '',
+    mobile: '',
     email: '',
+    address: '',
   });
   const [formError, setFormError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -103,7 +105,9 @@ export const ClientsPage = () => {
       company_name: '',
       contact_person: '',
       phone: '',
+      mobile: '',
       email: '',
+      address: '',
     });
     setFormError('');
     setIsModalOpen(true);
@@ -116,7 +120,9 @@ export const ClientsPage = () => {
       company_name: client.company_name,
       contact_person: client.contact_person,
       phone: client.phone,
+      mobile: client.mobile || '',
       email: client.email || '',
+      address: client.address || '',
     });
     setFormError('');
     setIsModalOpen(true);
@@ -146,7 +152,7 @@ export const ClientsPage = () => {
       return false;
     }
     if (!formData.phone.trim()) {
-      setFormError('연락처를 입력해주세요.');
+      setFormError('회사번호를 입력해주세요.');
       return false;
     }
     return true;
@@ -241,8 +247,9 @@ export const ClientsPage = () => {
                 <TableRow>
                   <TableCell header>회사명</TableCell>
                   <TableCell header>담당자</TableCell>
-                  <TableCell header>연락처</TableCell>
-                  <TableCell header>이메일</TableCell>
+                  <TableCell header>회사번호</TableCell>
+                  <TableCell header>휴대폰</TableCell>
+                  <TableCell header>주소</TableCell>
                   <TableCell header>등록일</TableCell>
                   <TableCell header align="center">
                     관리
@@ -255,7 +262,8 @@ export const ClientsPage = () => {
                     <TableCell>{client.company_name}</TableCell>
                     <TableCell>{client.contact_person}</TableCell>
                     <TableCell>{client.phone}</TableCell>
-                    <TableCell>{client.email || '-'}</TableCell>
+                    <TableCell>{client.mobile || '-'}</TableCell>
+                    <TableCell>{client.address || '-'}</TableCell>
                     <TableCell>{formatDate(client.created_at)}</TableCell>
                     <TableCell align="center">
                       <div className={styles.actionButtons}>
@@ -329,11 +337,20 @@ export const ClientsPage = () => {
             </div>
             <div className={styles.formField}>
               <label className={styles.label}>
-                연락처 <span className={styles.required}>*</span>
+                회사번호 <span className={styles.required}>*</span>
               </label>
               <Input
                 name="phone"
                 value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="02-0000-0000"
+              />
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.label}>휴대폰번호</label>
+              <Input
+                name="mobile"
+                value={formData.mobile}
                 onChange={handleInputChange}
                 placeholder="010-0000-0000"
               />
@@ -346,6 +363,15 @@ export const ClientsPage = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="email@example.com"
+              />
+            </div>
+            <div className={styles.formField}>
+              <label className={styles.label}>주소</label>
+              <Input
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                placeholder="주소를 입력하세요"
               />
             </div>
             {formError && <p className={styles.formError}>{formError}</p>}
