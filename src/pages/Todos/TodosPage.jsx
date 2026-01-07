@@ -60,10 +60,17 @@ export const TodosPage = () => {
   const [viewMode, setViewMode] = useState(VIEW_MODE.DAILY);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  // 검색 필터 상태
+  // 검색 필터 상태 (입력용)
   const [statusFilter, setStatusFilter] = useState('all');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  // 검색 적용 상태 (실제 검색에 사용)
+  const [appliedFilters, setAppliedFilters] = useState({
+    statusFilter: 'all',
+    startDate: '',
+    endDate: '',
+  });
 
   // 폼 상태
   const [editingTodo, setEditingTodo] = useState(null);
@@ -85,8 +92,8 @@ export const TodosPage = () => {
 
   // 날짜 범위 계산 헬퍼
   const getDateRange = useCallback(() => {
-    if (startDate || endDate) {
-      return { start: startDate, end: endDate };
+    if (appliedFilters.startDate || appliedFilters.endDate) {
+      return { start: appliedFilters.startDate, end: appliedFilters.endDate };
     }
 
     const today = getLocalDateString();
@@ -118,7 +125,7 @@ export const TodosPage = () => {
       default:
         return { start: today, end: today };
     }
-  }, [viewMode, currentDate, startDate, endDate]);
+  }, [viewMode, currentDate, appliedFilters.startDate, appliedFilters.endDate]);
 
   // 할 일 목록 조회
   const fetchTodos = useCallback(async () => {
@@ -128,12 +135,12 @@ export const TodosPage = () => {
     try {
       let result;
 
-      if (startDate || endDate || statusFilter !== 'all') {
-        // 검색 모드
+      if (appliedFilters.startDate || appliedFilters.endDate || appliedFilters.statusFilter !== 'all') {
+        // 검색 모드 (검색 버튼 클릭 후에만 적용)
         result = await getTodos({
-          startDate: startDate || undefined,
-          endDate: endDate || undefined,
-          status: statusFilter !== 'all' ? statusFilter : undefined,
+          startDate: appliedFilters.startDate || undefined,
+          endDate: appliedFilters.endDate || undefined,
+          status: appliedFilters.statusFilter !== 'all' ? appliedFilters.statusFilter : undefined,
         });
       } else {
         // 뷰 모드별 조회
@@ -213,7 +220,7 @@ export const TodosPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [viewMode, currentDate, startDate, endDate, statusFilter, getDateRange]);
+  }, [viewMode, currentDate, appliedFilters, getDateRange]);
 
   useEffect(() => {
     fetchTodos();
@@ -222,21 +229,39 @@ export const TodosPage = () => {
   // 뷰 모드 변경
   const handleViewModeChange = (mode) => {
     setViewMode(mode);
+    // 입력 필드 초기화
     setStartDate('');
     setEndDate('');
     setStatusFilter('all');
+    // 적용된 필터도 초기화
+    setAppliedFilters({
+      statusFilter: 'all',
+      startDate: '',
+      endDate: '',
+    });
   };
 
-  // 검색 실행
+  // 검색 실행 (버튼 클릭 시에만 필터 적용)
   const handleSearch = () => {
-    fetchTodos();
+    setAppliedFilters({
+      statusFilter,
+      startDate,
+      endDate,
+    });
   };
 
   // 검색 초기화
   const handleResetSearch = () => {
+    // 입력 필드 초기화
     setStartDate('');
     setEndDate('');
     setStatusFilter('all');
+    // 적용된 필터도 초기화
+    setAppliedFilters({
+      statusFilter: 'all',
+      startDate: '',
+      endDate: '',
+    });
   };
 
   // 폼 입력 변경

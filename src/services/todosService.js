@@ -165,8 +165,15 @@ export const getTodoById = async (id) => {
  * @returns {Promise<{data: Object|null, error: Error|null}>}
  */
 export const createTodo = async (todoData) => {
+  // 현재 로그인한 사용자 ID 가져오기
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { data: null, error: new Error('로그인이 필요합니다.') };
+  }
+
   const newTodo = {
     ...todoData,
+    user_id: user.id,
     status: todoData.status || TODO_STATUS.INCOMPLETE,
     repeat_type: todoData.repeat_type || REPEAT_TYPE.NONE,
     is_deleted: todoData.is_deleted || false,
