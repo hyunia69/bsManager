@@ -28,6 +28,7 @@ import {
   TODO_STATUS,
   REPEAT_TYPE,
   WEEKDAYS,
+  LAST_DAY_OF_MONTH,
 } from '@services/todosService';
 import styles from './TodosPage.module.css';
 
@@ -862,7 +863,7 @@ export const TodosPage = () => {
                               {todo.title}
                               {(todo.repeat_type && todo.repeat_type !== REPEAT_TYPE.NONE) && (
                                 <span className={styles.repeatBadge}>
-                                  🔄 {todo.repeat_type === REPEAT_TYPE.WEEKLY ? '매주' : '매달'}
+                                  🔄 {todo.repeat_type === REPEAT_TYPE.WEEKLY ? '매주' : (todo.repeat_day === LAST_DAY_OF_MONTH ? '매달 말일' : '매달')}
                                 </span>
                               )}
                             </h3>
@@ -912,7 +913,7 @@ export const TodosPage = () => {
                         {todo.title}
                         {(todo.repeat_type && todo.repeat_type !== REPEAT_TYPE.NONE) && (
                           <span className={styles.repeatBadge}>
-                            🔄 {todo.repeat_type === REPEAT_TYPE.WEEKLY ? '매주' : '매달'}
+                            🔄 {todo.repeat_type === REPEAT_TYPE.WEEKLY ? '매주' : (todo.repeat_day === LAST_DAY_OF_MONTH ? '매달 말일' : '매달')}
                           </span>
                         )}
                       </h3>
@@ -1035,6 +1036,7 @@ export const TodosPage = () => {
                       onChange={handleInputChange}
                       options={[
                         { value: '', label: '일자 선택' },
+                        { value: LAST_DAY_OF_MONTH, label: '말일' },
                         ...Array.from({ length: 31 }, (_, i) => ({
                           value: i + 1,
                           label: `${i + 1}일`,

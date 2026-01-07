@@ -37,6 +37,9 @@ export const WEEKDAYS = [
   { value: 7, label: '일요일' },
 ];
 
+// 매월 말일 상수 (repeat_day에 사용)
+export const LAST_DAY_OF_MONTH = -1;
+
 /**
  * 할 일 목록 조회 (날짜 범위, 상태 필터)
  * @param {Object} options - 조회 옵션
@@ -386,7 +389,13 @@ export const expandRecurringTodos = (recurringTodos, startDate, endDate, existin
         }
       } else if (todo.repeat_type === REPEAT_TYPE.MONTHLY) {
         // 매달 반복: 해당 일자에 표시
-        if (d.getDate() === todo.repeat_day) {
+        if (todo.repeat_day === LAST_DAY_OF_MONTH) {
+          // 말일 반복: 해당 월의 마지막 날인지 확인
+          const lastDayOfMonth = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+          if (d.getDate() === lastDayOfMonth) {
+            shouldInclude = true;
+          }
+        } else if (d.getDate() === todo.repeat_day) {
           shouldInclude = true;
         }
       }
