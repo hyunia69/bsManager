@@ -139,10 +139,17 @@ export const getConsultationsByClientId = async (clientId) => {
  * @returns {Promise<{data: Object|null, error: Error|null}>}
  */
 export const createConsultation = async (consultation) => {
+  // 현재 로그인한 사용자 ID 가져오기
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { data: null, error: new Error('로그인이 필요합니다.') };
+  }
+
   const { data, error } = await supabase
     .from('consultations')
     .insert([{
       ...consultation,
+      user_id: user.id,
       status: consultation.status || 'pending',
     }])
     .select()

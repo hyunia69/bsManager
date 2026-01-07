@@ -72,9 +72,15 @@ export const getClientById = async (id) => {
  * @returns {Promise<{data: Object|null, error: Error|null}>}
  */
 export const createClient = async (client) => {
+  // 현재 로그인한 사용자 ID 가져오기
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return { data: null, error: new Error('로그인이 필요합니다.') };
+  }
+
   const { data, error } = await supabase
     .from('clients')
-    .insert([client])
+    .insert([{ ...client, user_id: user.id }])
     .select()
     .single();
   return { data, error };
