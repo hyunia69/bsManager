@@ -543,6 +543,15 @@ export const TodosPage = () => {
     return `${month}/${day} (${days[date.getDay()]})`;
   };
 
+  // 주간 날짜 범위 포맷 (예: 1월12일~1월19일)
+  const getWeekRangeText = () => {
+    const { start, end } = getDateRange();
+    if (!start || !end) return '';
+    const [, startMonth, startDay] = start.split('-').map(Number);
+    const [, endMonth, endDay] = end.split('-').map(Number);
+    return `${startMonth}월${startDay}일~${endMonth}월${endDay}일`;
+  };
+
   // 월간 네비게이션
   const handlePrevMonth = () => {
     setCurrentDate((prev) => {
@@ -734,6 +743,7 @@ export const TodosPage = () => {
                   <Button variant="ghost" size="small" onClick={handlePrevWeek}>
                     ◀
                   </Button>
+                  <span className={styles.weekRange}>{getWeekRangeText()}</span>
                   <Button variant="ghost" size="small" onClick={handleNextWeek}>
                     ▶
                   </Button>
@@ -746,10 +756,8 @@ export const TodosPage = () => {
               <p className={styles.message}>불러오는 중...</p>
             ) : error ? (
               <p className={styles.errorMessage}>오류: {error}</p>
-            ) : todos.length === 0 ? (
-              <p className={styles.message}>등록된 할 일이 없습니다.</p>
             ) : viewMode === VIEW_MODE.MONTHLY ? (
-              /* 월간 캘린더 뷰 */
+              /* 월간 캘린더 뷰 - 일정 없어도 캘린더 표시 */
               <div className={styles.calendar}>
                 <div className={styles.calendarHeader}>
                   <Button variant="ghost" size="small" onClick={handlePrevMonth}>
@@ -809,6 +817,9 @@ export const TodosPage = () => {
               </div>
             ) : viewMode === VIEW_MODE.WEEKLY ? (
               /* 주간 리스트 뷰 */
+              todos.length === 0 ? (
+                <p className={styles.message}>등록된 할 일이 없습니다.</p>
+              ) : (
               <div className={styles.todoList}>
                 {Object.entries(groupedTodos)
                   .sort(([a], [b]) => a.localeCompare(b))
@@ -861,8 +872,12 @@ export const TodosPage = () => {
                     </div>
                   ))}
               </div>
+              )
             ) : (
               /* 일간 리스트 뷰 */
+              todos.length === 0 ? (
+                <p className={styles.message}>등록된 할 일이 없습니다.</p>
+              ) : (
               <div className={styles.todoList}>
                 {todos.map((todo) => (
                   <div
@@ -908,6 +923,7 @@ export const TodosPage = () => {
                   </div>
                 ))}
               </div>
+              )
             )}
           </CardContent>
         </Card>

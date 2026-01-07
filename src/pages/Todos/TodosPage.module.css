@@ -320,7 +320,15 @@
 
 .calendarNav {
   display: flex;
+  align-items: center;
   gap: var(--spacing-2, 0.5rem);
+}
+
+.weekRange {
+  font-size: var(--text-small-size, 0.875rem);
+  color: var(--color-text-secondary);
+  min-width: 120px;
+  text-align: center;
 }
 
 .calendarGrid {
