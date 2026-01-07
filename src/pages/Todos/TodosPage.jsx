@@ -738,6 +738,9 @@ export const TodosPage = () => {
                 {viewMode === VIEW_MODE.WEEKLY && '주간 할 일'}
                 {viewMode === VIEW_MODE.MONTHLY && '월간 할 일'}
               </h2>
+              {viewMode === VIEW_MODE.DAILY && (
+                <span className={styles.weekRange}>{formatDate(getLocalDateString())}</span>
+              )}
               {viewMode === VIEW_MODE.WEEKLY && (
                 <div className={styles.calendarNav}>
                   <Button variant="ghost" size="small" onClick={handlePrevWeek}>
