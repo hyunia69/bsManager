@@ -16,7 +16,7 @@
 .nav {
   display: flex;
   align-items: center;
-  max-width: var(--page-max-width, 1024px);
+  max-width: var(--page-max-width, 1200px);
   margin: 0 auto;
   padding: 0 var(--page-padding-inline, 24px);
   height: var(--header-height, 64px);
@@ -89,10 +89,10 @@
 
 .main {
   flex: 1;
-  max-width: var(--page-max-width, 1024px);
+  max-width: var(--page-max-width, 1200px);
   width: 100%;
   margin: 0 auto;
-  padding: var(--page-padding-block, 64px) var(--page-padding-inline, 24px);
+  padding: var(--spacing-6, 24px) var(--page-padding-inline, 24px);
 }
 
 /* 모바일 반응형 */

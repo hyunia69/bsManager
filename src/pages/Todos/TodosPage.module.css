@@ -3,10 +3,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6, 1.5rem);
-  padding: var(--page-padding-block, 2rem) var(--page-padding-inline, 1.5rem);
-  max-width: 1600px;
-  margin: 0 auto;
+  gap: 24px;
 }
 
 .header {
@@ -18,9 +15,10 @@
 }
 
 .title {
-  font-size: var(--title-3-size, 1.5rem);
-  font-weight: var(--font-weight-semibold, 600);
+  font-size: var(--title-3-size);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+  letter-spacing: var(--title-3-letter-spacing);
   margin: 0;
 }
 
@@ -93,8 +91,8 @@
 }
 
 .sectionTitle {
-  font-size: var(--title-6-size, 1rem);
-  font-weight: var(--font-weight-medium, 500);
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text-primary);
   margin: 0;
 }
@@ -313,7 +311,7 @@
 }
 
 .calendarTitle {
-  font-size: var(--title-6-size, 1rem);
+  font-size: var(--text-base-size, 0.875rem);
   font-weight: var(--font-weight-semibold, 600);
   color: var(--color-text-primary);
 }
@@ -351,7 +349,7 @@
 }
 
 .calendarDay {
-  min-height: 100px;
+  min-height: 120px;
   padding: var(--spacing-2, 0.5rem);
   background: var(--color-bg-secondary);
   cursor: pointer;
