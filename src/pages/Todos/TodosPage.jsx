@@ -617,13 +617,16 @@ export const TodosPage = () => {
       });
     }
 
-    // 다음 달 날짜들 (6주 채우기)
-    const remainingDays = 42 - days.length;
-    for (let i = 1; i <= remainingDays; i++) {
-      days.push({
-        date: new Date(year, month + 1, i),
-        isOtherMonth: true,
-      });
+    // 다음 달 날짜들 대신 빈 셀로 채우기 (마지막 주만 채움)
+    const remainingInWeek = days.length % 7;
+    if (remainingInWeek > 0) {
+      const emptyDays = 7 - remainingInWeek;
+      for (let i = 0; i < emptyDays; i++) {
+        days.push({
+          date: null,
+          isEmpty: true,
+        });
+      }
     }
 
     return days;
@@ -780,6 +783,12 @@ export const TodosPage = () => {
                     </div>
                   ))}
                   {generateCalendarDays().map((day, index) => {
+                    // 빈 셀 처리
+                    if (day.isEmpty) {
+                      return (
+                        <div key={index} className={`${styles.calendarDay} ${styles.emptyDay}`} />
+                      );
+                    }
                     const dayTodos = getTodosForDate(day.date);
                     return (
                       <div
@@ -791,7 +800,7 @@ export const TodosPage = () => {
                       >
                         <div className={styles.dayNumber}>{day.date.getDate()}</div>
                         <div className={styles.dayTodos}>
-                          {dayTodos.slice(0, 3).map((todo) => (
+                          {dayTodos.slice(0, 4).map((todo) => (
                             <div
                               key={todo.id}
                               className={`${styles.dayTodoItem} ${
@@ -807,9 +816,9 @@ export const TodosPage = () => {
                               {todo.title}
                             </div>
                           ))}
-                          {dayTodos.length > 3 && (
+                          {dayTodos.length > 4 && (
                             <div className={styles.moreTodos}>
-                              +{dayTodos.length - 3}개 더
+                              +{dayTodos.length - 4}개 더
                             </div>
                           )}
                         </div>

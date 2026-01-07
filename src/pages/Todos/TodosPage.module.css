@@ -5,7 +5,7 @@
   flex-direction: column;
   gap: var(--spacing-6, 1.5rem);
   padding: var(--page-padding-block, 2rem) var(--page-padding-inline, 1.5rem);
-  max-width: var(--page-max-width, 1400px);
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -351,8 +351,8 @@
 }
 
 .calendarDay {
-  min-height: 80px;
-  padding: var(--spacing-1, 0.25rem);
+  min-height: 100px;
+  padding: var(--spacing-2, 0.5rem);
   background: var(--color-bg-secondary);
   cursor: pointer;
   transition: background var(--speed-quick-transition, 150ms) var(--ease-out-quad);
@@ -365,6 +365,11 @@
 .calendarDay.otherMonth {
   background: var(--color-bg-primary);
   opacity: 0.5;
+}
+
+.calendarDay.emptyDay {
+  background: var(--color-bg-primary);
+  cursor: default;
 }
 
 .calendarDay.today {
