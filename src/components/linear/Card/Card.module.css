@@ -24,7 +24,6 @@
 .card:hover {
   border-color: var(--color-border-secondary);
   box-shadow: var(--shadow-medium);
-  transform: translateY(-2px);
 }
 
 /* Card Header */

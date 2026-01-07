@@ -320,27 +320,7 @@
   overflow: hidden;
 }
 
-.featureCard::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  opacity: 0;
-  transition: opacity var(--speed-regular-transition) var(--ease-out-quad);
-}
 
-.featureLink:hover .featureCard {
-  transform: translateY(-4px);
-  border-color: var(--color-border-secondary);
-  box-shadow: var(--shadow-high);
-}
-
-.featureLink:hover .featureCard::before {
-  opacity: 1;
-}
 
 .featureIconWrap {
   display: flex;
@@ -374,15 +354,8 @@
   font-size: var(--text-small-size);
   color: var(--color-accent);
   font-weight: var(--font-weight-medium);
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: all var(--speed-regular-transition) var(--ease-out-quad);
 }
 
-.featureLink:hover .featureArrow {
-  opacity: 1;
-  transform: translateX(0);
-}
 
 /* ===== FOOTER ===== */
 .footer {
