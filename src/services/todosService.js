@@ -1,28 +1,9 @@
 /**
  * 할 일 서비스
  * Supabase todos 테이블 CRUD 함수
- * Supabase 연결이 안 되면 Mock 데이터 사용
  */
 
 import { supabase } from './supabase';
-
-// Mock 모드 여부 (Supabase 연결 실패 시 자동 전환)
-let useMockData = false;
-
-// Mock 데이터 저장소 (지연 초기화)
-let mockTodos = null;
-
-// Mock 데이터 가져오기 (지연 초기화)
-const getMockTodos = () => {
-  if (mockTodos === null) {
-    mockTodos = initMockTodos();
-  }
-  return mockTodos;
-};
-
-// Mock ID 생성
-let mockIdCounter = 100;
-const generateMockId = () => String(++mockIdCounter);
 
 // 로컬 날짜를 YYYY-MM-DD 문자열로 변환 (타임존 문제 방지)
 const getLocalDateString = (date = new Date()) => {
@@ -30,49 +11,6 @@ const getLocalDateString = (date = new Date()) => {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-};
-
-// Mock 데이터 초기화 (로컬 날짜 사용)
-const initMockTodos = () => {
-  const today = getLocalDateString();
-  const dayOfWeek = new Date().getDay();
-  const weekday = dayOfWeek === 0 ? 7 : dayOfWeek;
-
-  return [
-    {
-      id: '1',
-      title: '프로젝트 기획서 작성',
-      content: '신규 프로젝트 기획서 초안 작성',
-      due_date: today,
-      status: 'incomplete',
-      repeat_type: 'none',
-      repeat_day: null,
-      is_deleted: false,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      title: '팀 미팅',
-      content: '주간 팀 미팅 참석',
-      due_date: today,
-      status: 'complete',
-      repeat_type: 'weekly',
-      repeat_day: weekday,
-      is_deleted: false,
-      created_at: new Date().toISOString(),
-    },
-    {
-      id: '3',
-      title: '보고서 제출',
-      content: '월간 업무 보고서 제출',
-      due_date: today,
-      status: 'incomplete',
-      repeat_type: 'monthly',
-      repeat_day: new Date().getDate(),
-      is_deleted: false,
-      created_at: new Date().toISOString(),
-    },
-  ];
 };
 
 // 상태 상수
@@ -100,40 +38,6 @@ export const WEEKDAYS = [
 ];
 
 /**
- * Mock 데이터 필터링 헬퍼
- */
-const filterMockTodos = ({ startDate, endDate, status, includeDeleted = false }) => {
-  let filtered = [...getMockTodos()];
-
-  // 삭제된 항목 필터링
-  if (!includeDeleted) {
-    filtered = filtered.filter((t) => !t.is_deleted);
-  }
-
-  // 날짜 필터링
-  if (startDate) {
-    filtered = filtered.filter((t) => t.due_date >= startDate);
-  }
-  if (endDate) {
-    filtered = filtered.filter((t) => t.due_date <= endDate);
-  }
-
-  // 상태 필터링
-  if (status && status !== 'all') {
-    filtered = filtered.filter((t) => t.status === status);
-  }
-
-  // 정렬 (날짜 오름차순, 생성일 내림차순)
-  filtered.sort((a, b) => {
-    const dateCompare = a.due_date.localeCompare(b.due_date);
-    if (dateCompare !== 0) return dateCompare;
-    return b.created_at.localeCompare(a.created_at);
-  });
-
-  return filtered;
-};
-
-/**
  * 할 일 목록 조회 (날짜 범위, 상태 필터)
  * @param {Object} options - 조회 옵션
  * @param {string} options.startDate - 시작 날짜 (YYYY-MM-DD)
@@ -143,12 +47,6 @@ const filterMockTodos = ({ startDate, endDate, status, includeDeleted = false })
  * @returns {Promise<{data: Array, error: Error|null}>}
  */
 export const getTodos = async ({ startDate, endDate, status, includeDeleted = false } = {}) => {
-  // Mock 모드 사용
-  if (useMockData) {
-    const data = filterMockTodos({ startDate, endDate, status, includeDeleted });
-    return { data, error: null };
-  }
-
   try {
     let query = supabase
       .from('todos')
@@ -173,18 +71,15 @@ export const getTodos = async ({ startDate, endDate, status, includeDeleted = fa
 
     const { data, error } = await query;
 
-    // Supabase 오류 시 Mock 모드로 전환
     if (error) {
-      console.warn('Supabase 오류, Mock 데이터로 전환:', error.message);
-      useMockData = true;
-      return { data: filterMockTodos({ startDate, endDate, status, includeDeleted }), error: null };
+      console.error('할 일 목록 조회 오류:', error.message);
+      return { data: [], error };
     }
 
-    return { data, error };
+    return { data: data || [], error: null };
   } catch (err) {
-    console.warn('Supabase 연결 실패, Mock 데이터로 전환:', err.message);
-    useMockData = true;
-    return { data: filterMockTodos({ startDate, endDate, status, includeDeleted }), error: null };
+    console.error('할 일 목록 조회 실패:', err.message);
+    return { data: [], error: err };
   }
 };
 
@@ -239,11 +134,6 @@ export const getMonthlyTodos = async (year, month) => {
  * @returns {Promise<{data: Object|null, error: Error|null}>}
  */
 export const getTodoById = async (id) => {
-  if (useMockData) {
-    const todo = getMockTodos().find((t) => t.id === id);
-    return { data: todo || null, error: null };
-  }
-
   try {
     const { data, error } = await supabase
       .from('todos')
@@ -252,16 +142,14 @@ export const getTodoById = async (id) => {
       .single();
 
     if (error) {
-      useMockData = true;
-      const todo = getMockTodos().find((t) => t.id === id);
-      return { data: todo || null, error: null };
+      console.error('할 일 상세 조회 오류:', error.message);
+      return { data: null, error };
     }
 
-    return { data, error };
+    return { data, error: null };
   } catch (err) {
-    useMockData = true;
-    const todo = getMockTodos().find((t) => t.id === id);
-    return { data: todo || null, error: null };
+    console.error('할 일 상세 조회 실패:', err.message);
+    return { data: null, error: err };
   }
 };
 
@@ -285,12 +173,6 @@ export const createTodo = async (todoData) => {
     created_at: new Date().toISOString(),
   };
 
-  if (useMockData) {
-    const mockTodo = { ...newTodo, id: generateMockId() };
-    getMockTodos().push(mockTodo);
-    return { data: mockTodo, error: null };
-  }
-
   try {
     const { data, error } = await supabase
       .from('todos')
@@ -299,18 +181,14 @@ export const createTodo = async (todoData) => {
       .single();
 
     if (error) {
-      useMockData = true;
-      const mockTodo = { ...newTodo, id: generateMockId() };
-      getMockTodos().push(mockTodo);
-      return { data: mockTodo, error: null };
+      console.error('할 일 생성 오류:', error.message);
+      return { data: null, error };
     }
 
-    return { data, error };
+    return { data, error: null };
   } catch (err) {
-    useMockData = true;
-    const mockTodo = { ...newTodo, id: generateMockId() };
-    getMockTodos().push(mockTodo);
-    return { data: mockTodo, error: null };
+    console.error('할 일 생성 실패:', err.message);
+    return { data: null, error: err };
   }
 };
 
@@ -321,16 +199,6 @@ export const createTodo = async (todoData) => {
  * @returns {Promise<{data: Object|null, error: Error|null}>}
  */
 export const updateTodo = async (id, todoData) => {
-  if (useMockData) {
-    const todos = getMockTodos();
-    const index = todos.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      todos[index] = { ...todos[index], ...todoData };
-      return { data: todos[index], error: null };
-    }
-    return { data: null, error: { message: '할 일을 찾을 수 없습니다.' } };
-  }
-
   try {
     const { data, error } = await supabase
       .from('todos')
@@ -340,26 +208,14 @@ export const updateTodo = async (id, todoData) => {
       .single();
 
     if (error) {
-      useMockData = true;
-      const todos = getMockTodos();
-      const index = todos.findIndex((t) => t.id === id);
-      if (index !== -1) {
-        todos[index] = { ...todos[index], ...todoData };
-        return { data: todos[index], error: null };
-      }
-      return { data: null, error: null };
+      console.error('할 일 수정 오류:', error.message);
+      return { data: null, error };
     }
 
-    return { data, error };
+    return { data, error: null };
   } catch (err) {
-    useMockData = true;
-    const todos = getMockTodos();
-    const index = todos.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      todos[index] = { ...todos[index], ...todoData };
-      return { data: todos[index], error: null };
-    }
-    return { data: null, error: null };
+    console.error('할 일 수정 실패:', err.message);
+    return { data: null, error: err };
   }
 };
 
@@ -379,15 +235,6 @@ export const updateTodoStatus = async (id, status) => {
  * @returns {Promise<{error: Error|null}>}
  */
 export const deleteTodo = async (id) => {
-  if (useMockData) {
-    const todos = getMockTodos();
-    const index = todos.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      todos.splice(index, 1);
-    }
-    return { error: null };
-  }
-
   try {
     const { error } = await supabase
       .from('todos')
@@ -395,24 +242,14 @@ export const deleteTodo = async (id) => {
       .eq('id', id);
 
     if (error) {
-      useMockData = true;
-      const todos = getMockTodos();
-      const index = todos.findIndex((t) => t.id === id);
-      if (index !== -1) {
-        todos.splice(index, 1);
-      }
-      return { error: null };
+      console.error('할 일 삭제 오류:', error.message);
+      return { error };
     }
 
-    return { error };
-  } catch (err) {
-    useMockData = true;
-    const todos = getMockTodos();
-    const index = todos.findIndex((t) => t.id === id);
-    if (index !== -1) {
-      todos.splice(index, 1);
-    }
     return { error: null };
+  } catch (err) {
+    console.error('할 일 삭제 실패:', err.message);
+    return { error: err };
   }
 };
 
@@ -447,13 +284,6 @@ export const getDayOfWeek = (date) => {
  * @returns {Promise<{data: Array, error: Error|null}>}
  */
 export const getRecurringTodos = async () => {
-  if (useMockData) {
-    const data = getMockTodos()
-      .filter((t) => t.repeat_type && t.repeat_type !== REPEAT_TYPE.NONE && !t.is_deleted)
-      .sort((a, b) => b.created_at.localeCompare(a.created_at));
-    return { data, error: null };
-  }
-
   try {
     const { data, error } = await supabase
       .from('todos')
@@ -463,20 +293,14 @@ export const getRecurringTodos = async () => {
       .order('created_at', { ascending: false });
 
     if (error) {
-      useMockData = true;
-      const mockData = getMockTodos()
-        .filter((t) => t.repeat_type && t.repeat_type !== REPEAT_TYPE.NONE && !t.is_deleted)
-        .sort((a, b) => b.created_at.localeCompare(a.created_at));
-      return { data: mockData, error: null };
+      console.error('반복 일정 조회 오류:', error.message);
+      return { data: [], error };
     }
 
-    return { data, error };
+    return { data: data || [], error: null };
   } catch (err) {
-    useMockData = true;
-    const mockData = getMockTodos()
-      .filter((t) => t.repeat_type && t.repeat_type !== REPEAT_TYPE.NONE && !t.is_deleted)
-      .sort((a, b) => b.created_at.localeCompare(a.created_at));
-    return { data: mockData, error: null };
+    console.error('반복 일정 조회 실패:', err.message);
+    return { data: [], error: err };
   }
 };
 
@@ -487,17 +311,6 @@ export const getRecurringTodos = async () => {
  * @returns {Promise<{data: Array, error: Error|null}>}
  */
 export const getDeletedTodos = async (startDate, endDate) => {
-  if (useMockData) {
-    let filtered = getMockTodos().filter((t) => t.is_deleted);
-    if (startDate) {
-      filtered = filtered.filter((t) => t.due_date >= startDate);
-    }
-    if (endDate) {
-      filtered = filtered.filter((t) => t.due_date <= endDate);
-    }
-    return { data: filtered, error: null };
-  }
-
   try {
     let query = supabase
       .from('todos')
@@ -514,28 +327,14 @@ export const getDeletedTodos = async (startDate, endDate) => {
     const { data, error } = await query;
 
     if (error) {
-      useMockData = true;
-      let filtered = getMockTodos().filter((t) => t.is_deleted);
-      if (startDate) {
-        filtered = filtered.filter((t) => t.due_date >= startDate);
-      }
-      if (endDate) {
-        filtered = filtered.filter((t) => t.due_date <= endDate);
-      }
-      return { data: filtered, error: null };
+      console.error('삭제된 일정 조회 오류:', error.message);
+      return { data: [], error };
     }
 
-    return { data, error };
+    return { data: data || [], error: null };
   } catch (err) {
-    useMockData = true;
-    let filtered = getMockTodos().filter((t) => t.is_deleted);
-    if (startDate) {
-      filtered = filtered.filter((t) => t.due_date >= startDate);
-    }
-    if (endDate) {
-      filtered = filtered.filter((t) => t.due_date <= endDate);
-    }
-    return { data: filtered, error: null };
+    console.error('삭제된 일정 조회 실패:', err.message);
+    return { data: [], error: err };
   }
 };
 
