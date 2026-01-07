@@ -248,3 +248,7 @@ git push origin main → Vercel 자동 감지 → 빌드 → 배포
 - **자동 배포**: main 브랜치 push 시 자동 배포
 - **Preview 배포**: PR 생성 시 별도 Preview URL 생성
 - **롤백**: Vercel 대시보드에서 이전 버전으로 롤백 가능
+
+### 참조 사이트 아이디 
+- 아래 내용을 참조해서 claude agent 가 직접 작업을 하도록 한다.
+- claudedocs/bsManager_ID.md
