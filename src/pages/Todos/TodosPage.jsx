@@ -194,7 +194,12 @@ export const TodosPage = () => {
               .map((t) => `${t.due_date}_${t.title}`)
           );
 
-          // 원본 반복 일정 중 개별 처리된 것은 제외
+          // 삭제된 일정 키 (개별 삭제된 날짜+제목)
+          const deletedKeys = new Set(
+            (deletedResult.data || []).map((t) => `${t.due_date}_${t.title}`)
+          );
+
+          // 원본 반복 일정 중 개별 처리/삭제된 것은 제외
           const filteredBaseTodos = (result.data || []).filter((todo) => {
             // 반복 일정이 아니면 유지
             if (!todo.repeat_type || todo.repeat_type === REPEAT_TYPE.NONE) {
@@ -202,7 +207,10 @@ export const TodosPage = () => {
             }
             // 반복 일정인 경우, 같은 날짜+제목의 개별 일정이 있으면 제외
             const key = `${todo.due_date}_${todo.title}`;
-            return !individualTodoKeys.has(key);
+            if (individualTodoKeys.has(key)) return false;
+            // 반복 일정인 경우, 같은 날짜+제목이 삭제되었으면 제외
+            if (deletedKeys.has(key)) return false;
+            return true;
           });
 
           const allTodos = [...filteredBaseTodos, ...expandedTodos];
